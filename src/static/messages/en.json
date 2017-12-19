@@ -1,0 +1,39 @@
+{
+  "login.title": "Explore your world!",
+  "login.intro":
+    "Your world is one click away. Enter your details and explore!",
+  "login.name": "Name",
+  "login.code": "Code",
+  "login.signin": "Sign in",
+  "login.forgotdetails":
+    "Forgot your login details? Click {link} and we will remind you.",
+  "login.forgotdetails.link": "here",
+
+  "config.title": "Settings",
+  "config.general": "General",
+  "config.language": "Language",
+  "config.volume": "Volume",
+  "config.pixelRatio": "Pixel Ratio",
+  "config.video": "Video",
+  "config.bloom": "Bloom",
+  "config.vignette": "Vignette",
+  "config.antialiasing": "Anti-aliasing",
+  "config.ambientocclusion": "Ambient occlusion",
+  "config.shadowquality": "Shadow quality",
+  "config.shadowquality.low": "Low",
+  "config.shadowquality.medium": "Medium",
+  "config.shadowquality.high": "High",
+  "config.shadowquality.ultra": "Ultra",
+
+  "avatar.title": "Avatar",
+
+  "create.title": "Create",
+
+  "pagination.next": "Next",
+  "pagination.previous": "Previous",
+
+  "compass.direction.n": "N",
+  "compass.direction.e": "E",
+  "compass.direction.s": "S",
+  "compass.direction.w": "W"
+}

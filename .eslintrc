@@ -1,0 +1,31 @@
+{
+  "extends": ["airbnb", "prettier"],
+  "rules": {
+    "arrow-parens": ["error", "as-needed"],
+    "no-unused-expressions": ["error", { "allowTaggedTemplates": true }],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["to"],
+        "aspects": ["noHref", "invalidHref", "preferButton"]
+      }
+    ]
+  },
+  "env": {
+    "serviceworker": true,
+    "browser": true
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "./webpack/webpack.dev.js"
+      }
+    }
+  },
+  "globals": {
+    "APP_HOST": false,
+    "APP_PORT": false,
+    "APP_HTTPS": false
+  }
+}

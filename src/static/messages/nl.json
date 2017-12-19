@@ -1,0 +1,39 @@
+{
+  "login.title": "Verken jouw wereld!",
+  "login.intro":
+    "Je bent één klik verwijderd van je wereld. Vul je gegevens in en ontdek!",
+  "login.name": "Naam",
+  "login.code": "Code",
+  "login.signin": "Aanmelden",
+  "login.forgotdetails":
+    "Je gegevens vergeten? Klik {link} en we herinneren je.",
+  "login.forgotdetails.link": "hier",
+
+  "config.title": "Instellingen",
+  "config.general": "Algemeen",
+  "config.language": "Taal",
+  "config.volume": "Volume",
+  "config.pixelRatio": "Pixelresolutie",
+  "config.video": "Video",
+  "config.bloom": "Bloom",
+  "config.vignette": "Vignette",
+  "config.antialiasing": "Anti-aliasing",
+  "config.ambientocclusion": "Ambient occlusion",
+  "config.shadowquality": "Schaduwkwaliteit",
+  "config.shadowquality.low": "Laag",
+  "config.shadowquality.medium": "Gemiddeld",
+  "config.shadowquality.high": "Hoog",
+  "config.shadowquality.ultra": "Ultra",
+
+  "avatar.title": "Avatar",
+
+  "create.title": "Bouw",
+
+  "pagination.next": "Volgende",
+  "pagination.previous": "Vorige",
+
+  "compass.direction.n": "N",
+  "compass.direction.e": "O",
+  "compass.direction.s": "Z",
+  "compass.direction.w": "W"
+}

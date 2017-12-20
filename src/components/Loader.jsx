@@ -124,14 +124,14 @@ class Loader extends Component {
 
     const width = this.canvas.parentNode.clientWidth
     const pixelRatio = window.devicePixelRatio
-
-    const scaleRatio = Math.min(width * (size / 100) / 100, 1)
+    const scaleRatio = Math.max(width * (size / 100) / 100, 1)
 
     this.canvas.style.width = `${width * (size / 100)}px`
     this.canvas.style.height = `${width * (size / 100)}px`
 
     this.canvas.width = 100 * scaleRatio * pixelRatio
     this.canvas.height = 100 * scaleRatio * pixelRatio
+
     this.ctx.scale(scaleRatio * pixelRatio, scaleRatio * pixelRatio)
 
     // Canvas styles

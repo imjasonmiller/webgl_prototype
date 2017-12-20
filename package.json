@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "Prototype for a WebGL app",
   "main": "index.js",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imjasonmiller/webgl_prototype"
+  },
   "scripts": {
     "test": "eslint src/*",
     "db": "cross-env sh ./db.create.sh",
@@ -37,10 +42,12 @@
     "react-intl": "^2.4.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
+    "react-three-renderer": "^3.2.3",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
     "rimraf": "^2.6.2",
     "styled-components": "^2.3.0",
+    "three": "^0.89.0",
     "uglifyjs-webpack-plugin": "^1.1.4",
     "webpack": "^3.10.0",
     "webpack-hot-server-middleware": "^0.3.1",

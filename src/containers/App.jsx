@@ -8,8 +8,7 @@ import debounce from "lodash/debounce"
 
 import { windowResize } from "actions/window"
 
-import Auth from "containers/Auth"
-import Game from "containers/Game"
+import { Auth, Game } from "containers"
 
 import localeEN from "react-intl/locale-data/en"
 import localeNL from "react-intl/locale-data/nl"

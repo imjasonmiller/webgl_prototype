@@ -64,18 +64,23 @@ class Users {
   deleteToken(ctx) {
     return this.constructor
       .verifyToken(ctx.cookies.get("token"), ctx.header.xsrf)
-      .then(() => {
-        // Delete cookies via expiration
-        ctx.cookies.set("token", "", {
-          httpOnly: true,
-          expires: new Date("Thu, 01 Jan 1970 00:00:00 GMT"),
-        })
-        ctx.cookies.set("xsrf", "", {
-          httpOnly: false,
-          expires: new Date("Thu, 01 Jan 1970 00:00:00 GMT"),
-        })
-        ctx.status = 200
-      })
+      .then(
+        () => {
+          // Delete cookies via expiration
+          ctx.cookies.set("token", "", {
+            httpOnly: true,
+            expires: new Date("Thu, 01 Jan 1970 00:00:00 GMT"),
+          })
+          ctx.cookies.set("xsrf", "", {
+            httpOnly: false,
+            expires: new Date("Thu, 01 Jan 1970 00:00:00 GMT"),
+          })
+          ctx.status = 200
+        },
+        () => {
+          ctx.status = 401
+        },
+      )
       .catch(err => ctx.throw(500, err.message))
   }
 }

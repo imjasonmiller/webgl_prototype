@@ -13,20 +13,28 @@ class Renderer extends Component {
     }
 
     this.cameraPosition = new Vector3(0, 0, 5)
+  }
 
-    this.onAnimate = () => {
-      this.setState({
-        cubeRotation: new Euler(
-          this.state.cubeRotation.x + 0.1,
-          this.state.cubeRotation.y + 0.1,
-          0,
-        ),
-      })
-    }
+  componentDidMount() {
+    this.composer()
+  }
+
+  composer() {
+    this.setState({
+      cubeRotation: new Euler(
+        this.state.cubeRotation.x + 0.1,
+        this.state.cubeRotation.y + 0.1,
+        0,
+      ),
+    })
+
+    this.webGLRenderer.render(this.scene, this.camera)
+
+    window.requestAnimationFrame(() => this.composer())
   }
 
   render() {
-    const { winWidth, winHeight } = this.props
+    const { winWidth, winHeight, pixelRatio } = this.props
 
     const styles = {
       display: "block",
@@ -43,9 +51,18 @@ class Renderer extends Component {
         mainCamera="camera"
         width={winWidth}
         height={winHeight}
+        onRendererUpdated={c => {
+          this.webGLRenderer = c
+        }}
+        forceManualRender
+        pixelRatio={pixelRatio}
         onAnimate={this.onAnimate}
       >
-        <scene>
+        <scene
+          ref={c => {
+            this.scene = c
+          }}
+        >
           <perspectiveCamera
             name="camera"
             fov={75}
@@ -53,6 +70,9 @@ class Renderer extends Component {
             near={0.1}
             far={1000}
             position={this.cameraPosition}
+            ref={c => {
+              this.camera = c
+            }}
           />
           <mesh rotation={this.state.cubeRotation}>
             <boxGeometry width={1} height={1} depth={1} />
@@ -67,11 +87,13 @@ class Renderer extends Component {
 Renderer.propTypes = {
   winWidth: PropTypes.number.isRequired,
   winHeight: PropTypes.number.isRequired,
+  pixelRatio: PropTypes.number.isRequired,
 }
 
 const mapStateToProps = state => ({
   winWidth: state.window.width,
   winHeight: state.window.height,
+  pixelRatio: state.window.pixelRatio,
 })
 
 export default connect(mapStateToProps)(Renderer)

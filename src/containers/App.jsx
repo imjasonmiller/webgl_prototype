@@ -86,6 +86,7 @@ const Main = styled.main`
 
 class App extends Component {
   componentDidMount() {
+    this.handleResize()
     this.handleResize = debounce(this.handleResize, 500).bind(this)
     window.addEventListener("resize", this.handleResize)
   }

@@ -36,8 +36,9 @@ const client = {
           {
             loader: "url-loader",
             options: {
-              limit: 10000,
-              name: "static/images/[name].[ext]",
+              limit: 1024,
+              outputPath: "img/",
+              name: "[hash].[ext]",
             },
           },
           {
@@ -122,9 +123,10 @@ const server = {
           {
             loader: "url-loader",
             options: {
-              limit: 10000,
+              limit: 1024,
               emitFile: false,
-              name: "static/images/[name].[ext]",
+              outputPath: "img/",
+              name: "[hash].[ext]",
             },
           },
           {

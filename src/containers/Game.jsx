@@ -1,25 +1,24 @@
-import React, { Component } from "react"
-import PropTypes from "prop-types"
-import { connect } from "react-redux"
-import { withTheme } from "styled-components"
-
-import { Loader } from "components"
+import React from "react"
+import styled, { withTheme } from "styled-components"
 import { Overlay, Renderer } from "containers"
 
-const Game = ({ theme }) => (
+const WrapOverflow = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+`
+
+const Game = () => (
   <div>
-    <div>
+    <WrapOverflow>
       {/* <Loader size={50} speed={2} color={theme.orange} /> */}
       <Renderer />
       <Overlay />
-    </div>
+    </WrapOverflow>
   </div>
 )
-
-Game.propTypes = {
-  theme: PropTypes.shape({
-    orange: PropTypes.string.isRequired,
-  }).isRequired,
-}
 
 export default withTheme(Game)

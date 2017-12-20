@@ -29,16 +29,17 @@ $ npm run prod       # build into the build dir
 
 Make sure to create a `.env` file with the environment variables below, although APP_HTTPS can be left out. For more information, see the [dotenv repository](https://github.com/motdotla/dotenv).
 
-| Option    | Default           |
-| --------- | ----------------- |
-| APP_HOST  | `localhost`       |
-| APP_PORT  | `8080`            |
-| APP_HTTPS | `false`           |
-| DB_USER   | `postgres`        |
-| DB_PASS   |
-| DB_HOST   | `localhost`       |
-| DB_PORT   | `5432`            |
-| DB_NAME   | `webgl_prototype` |
+| Option     | Default           |
+| ---------- | ----------------- |
+| APP_HOST   | `localhost`       |
+| APP_PORT   | `8080`            |
+| APP_HTTPS  | `false`           |
+| APP_SECRET |                   |
+| DB_USER    | `postgres`        |
+| DB_PASS    |
+| DB_HOST    | `localhost`       |
+| DB_PORT    | `5432`            |
+| DB_NAME    | `webgl_prototype` |
 
 #### Testing
 

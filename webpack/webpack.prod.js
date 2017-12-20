@@ -4,6 +4,8 @@ const path = require("path")
 const webpack = require("webpack")
 const nodeExternals = require("webpack-node-externals")
 const Uglify = require("uglifyjs-webpack-plugin")
+const CompressionPlugin = require("compression-webpack-plugin")
+// const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer")
 
 const client = {
   name: "client",
@@ -11,7 +13,7 @@ const client = {
   context: path.resolve(__dirname, ".."),
   entry: "./src/client.entry.jsx",
   output: {
-    path: path.resolve(__dirname, "..", "build"),
+    path: path.resolve(__dirname, "..", "build", "public"),
     filename: "client.js",
     publicPath: "/",
   },
@@ -24,12 +26,38 @@ const client = {
         options: {
           babelrc: true,
           presets: [
-            ["@babel/env", { modules: false, useBuiltIns: "entry" }],
+            ["@babel/env", { modules: false, useBuiltIns: "usage" }],
             "@babel/react",
             "@babel/preset-stage-0",
           ],
           plugins: ["react-hot-loader/babel"],
         },
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 1024,
+              outputPath: "img/",
+              name: "[hash].[ext]",
+            },
+          },
+          {
+            loader: "svgo-loader",
+            options: {
+              plugins: [
+                { removeTitle: true },
+                { convertColors: { shorthex: false } },
+                { convertPathData: false },
+                { cleanupIDs: { remove: false } },
+                { removesComments: true },
+              ],
+            },
+          },
+        ],
+        include: path.resolve("src", "static", "images"),
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg)$/,
@@ -38,6 +66,7 @@ const client = {
           outputPath: "fonts/",
           name: "[hash].[ext]",
         },
+        include: path.resolve("src", "static", "fonts"),
       },
     ],
   },
@@ -48,14 +77,22 @@ const client = {
   plugins: [
     new webpack.DefinePlugin({
       DEV: false,
-      HOST: JSON.stringify(process.env.HOST || "localhost"),
-      PORT: JSON.stringify(process.env.PORT || 8080),
-      HTTPS: JSON.stringify(process.env.HTTPS ? "https" : "http"),
+      APP_HOST: JSON.stringify(process.env.APP_HOST || "localhost"),
+      APP_PORT: JSON.stringify(process.env.APP_PORT || 8080),
+      APP_HTTPS: JSON.stringify(process.env.APP_HTTPS ? "https" : "http"),
       "process.env": {
         NODE_ENV: JSON.stringify("production"),
       },
     }),
     new Uglify(),
+    new CompressionPlugin({
+      asset: "[path].gz[query]",
+      algorithm: "gzip",
+      test: /\.js$|\.css$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.8,
+    }),
+    // new BundleAnalyzerPlugin(),
   ],
 }
 
@@ -94,6 +131,33 @@ const server = {
         },
       },
       {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 1024,
+              emitFile: false,
+              outputPath: "img/",
+              name: "[hash].[ext]",
+            },
+          },
+          {
+            loader: "svgo-loader",
+            options: {
+              plugins: [
+                { removeTitle: true },
+                { convertColors: { shorthex: false } },
+                { convertPathData: false },
+                { cleanupIDs: { remove: false } },
+                { removesComments: true },
+              ],
+            },
+          },
+        ],
+        include: path.resolve("src", "static", "images"),
+      },
+      {
         test: /\.(woff|woff2|eot|ttf|svg)$/,
         loader: "file-loader",
         options: {
@@ -101,6 +165,7 @@ const server = {
           outputPath: "fonts/",
           name: "[hash].[ext]",
         },
+        include: path.resolve("src", "static", "fonts"),
       },
     ],
   },

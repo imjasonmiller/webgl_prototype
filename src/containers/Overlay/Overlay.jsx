@@ -2,9 +2,11 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import styled from "styled-components"
+import media from "style-utils/media"
 
 import { ButtonStats, ButtonTool } from "components"
 
+const iconConfig = require("static/images/icon_config.svg")
 const iconLogout = require("static/images/icon_logout.svg")
 
 const iconSelect = require("static/images/tool_select.svg")
@@ -29,6 +31,10 @@ const Controls = styled.div`
   right: 0;
   left: 0;
   margin: auto;
+  ${media.lg`
+    width: 500px;
+    height: 150px;
+  `};
 `
 
 class Overlay extends Component {
@@ -39,6 +45,10 @@ class Overlay extends Component {
     }
   }
 
+  handleConfig() {
+    console.log("Config")
+  }
+
   handleLogout() {
     this.props.dispatch({ type: "LOGOUT_REQUEST" })
   }
@@ -47,6 +57,11 @@ class Overlay extends Component {
     return (
       <div>
         <Stats>
+          <ButtonStats
+            alt="Config"
+            src={iconConfig}
+            onClick={() => this.handleConfig()}
+          />
           <ButtonStats
             alt="Logout"
             src={iconLogout}

@@ -13,19 +13,19 @@
     ]
   },
   "env": {
-    "serviceworker": true,
     "browser": true
   },
   "settings": {
     "import/resolver": {
       "webpack": {
-        "config": "./webpack/webpack.dev.js"
+        "config": "webpack/webpack.dev.js"
       }
     }
   },
   "globals": {
     "APP_HOST": false,
     "APP_PORT": false,
-    "APP_HTTPS": false
+    "APP_HTTPS": false,
+    "THREE": true
   }
 }

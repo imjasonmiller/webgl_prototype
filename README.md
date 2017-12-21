@@ -13,7 +13,7 @@ There is [i18n](https://en.wikipedia.org/wiki/Internationalization_and_localizat
 First make sure that [PostgreSQL](https://www.postgresql.org/download/) is installed. I used version 10.0, but releases that are less recent should also work fine.
 
 ```
-$ npm run db         # init the webgl_prototype database
+$ npm run db           # init the webgl_prototype database
 ```
 
 #### Starting or building the server
@@ -21,8 +21,9 @@ $ npm run db         # init the webgl_prototype database
 Note that `npm run dev` hot reloads and renders universally.
 
 ```
-$ npm run dev        # start the dev server
-$ npm run prod       # build into the build dir
+$ npm run dev          # start the dev server
+$ npm run prod:build   # build the prod server
+$ npm run prod:start   # start the prod server
 ```
 
 #### Environment variables

@@ -1,36 +1,70 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
-import { Euler, Vector3 } from "three"
 import React3 from "react-three-renderer"
+
+import { World } from "containers/Renderer/Meshes"
+
+// eslint-disable-next-line
+if (CLIENT) require("three/examples/js/loaders/GLTFLoader")
+
+const home = require("static/models/home.glb")
 
 class Renderer extends Component {
   constructor() {
     super()
 
     this.state = {
-      cubeRotation: new Euler(),
+      pivotRotation: new THREE.Euler(),
     }
 
-    this.cameraPosition = new Vector3(0, 0, 5)
+    this.origin = new THREE.Vector3(0, 0, 0)
+    this.cameraPosition = new THREE.Vector3(0, 200, 500)
   }
 
   componentDidMount() {
     this.composer()
+    const loader = new THREE.GLTFLoader()
+    loader.load(
+      home,
+      data => {
+        const model = data.scene
+
+        let i = 0
+        model.traverse(node => {
+          if (node.isMesh) {
+            // node.material = mats[i++]
+            node.geometry.computeVertexNormals()
+          }
+        })
+
+        model.scale.x = 0.1
+        model.scale.y = 0.1
+        model.scale.z = 0.1
+
+        // this.scene.add(model)
+      },
+      xhr => {
+        console.log(`${xhr.loaded / xhr.total * 100}% loaded`)
+      },
+      err => {
+        console.log("Err:", err)
+      },
+    )
+  }
+
+  componentWillUnmount() {
+    window.cancelAnimationFrame(this.raf)
   }
 
   composer() {
     this.setState({
-      cubeRotation: new Euler(
-        this.state.cubeRotation.x + 0.1,
-        this.state.cubeRotation.y + 0.1,
-        0,
-      ),
+      pivotRotation: new THREE.Euler(0, this.state.pivotRotation.y + 0.01, 0),
     })
 
     this.webGLRenderer.render(this.scene, this.camera)
 
-    window.requestAnimationFrame(() => this.composer())
+    this.raf = window.requestAnimationFrame(() => this.composer())
   }
 
   render() {
@@ -54,6 +88,7 @@ class Renderer extends Component {
         onRendererUpdated={c => {
           this.webGLRenderer = c
         }}
+        gammaOutput
         forceManualRender
         pixelRatio={pixelRatio}
         onAnimate={this.onAnimate}
@@ -63,21 +98,34 @@ class Renderer extends Component {
             this.scene = c
           }}
         >
-          <perspectiveCamera
-            name="camera"
-            fov={75}
-            aspect={winWidth / winHeight}
-            near={0.1}
-            far={1000}
-            position={this.cameraPosition}
+          <object3D
+            rotation={this.state.pivotRotation}
             ref={c => {
-              this.camera = c
+              this.cameraPivot = c
             }}
+          >
+            <perspectiveCamera
+              name="camera"
+              fov={75}
+              aspect={winWidth / winHeight}
+              near={0.1}
+              far={1000}
+              lookAt={this.origin}
+              position={this.cameraPosition}
+              ref={c => {
+                this.camera = c
+              }}
+            />
+          </object3D>
+          <ambientLight intensity={1} />
+          <World
+            width={500}
+            height={500}
+            depth={500}
+            widthSegments={28}
+            heightSegments={1}
+            depthSegments={28}
           />
-          <mesh rotation={this.state.cubeRotation}>
-            <boxGeometry width={1} height={1} depth={1} />
-            <meshBasicMaterial color={0x00ff00} />
-          </mesh>
         </scene>
       </React3>
     )

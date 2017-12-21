@@ -44,7 +44,7 @@ const db = require("knex")({
 
 const routes = require("./routes/login")(router, db)
 
-if (DEV) {
+if (DEV === "true") {
   const webpack = require("webpack")
   const webpackConfig = require("../webpack/webpack.dev.js")
   const koaWebpack = require("koa-webpack")

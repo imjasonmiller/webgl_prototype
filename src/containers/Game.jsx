@@ -10,7 +10,6 @@ const WrapOverflow = styled.div`
   left: 0;
   overflow: hidden;
 `
-
 const Game = () => (
   <div>
     <WrapOverflow>

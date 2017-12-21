@@ -68,6 +68,15 @@ const client = {
         },
         include: path.resolve("src", "static", "fonts"),
       },
+      {
+        test: /\.glb$/,
+        loader: "file-loader",
+        options: {
+          outputPath: "models/",
+          name: "[hash].[ext]",
+        },
+        include: path.resolve("src", "static", "models"),
+      },
     ],
   },
   resolve: {
@@ -77,12 +86,16 @@ const client = {
   plugins: [
     new webpack.DefinePlugin({
       DEV: false,
+      CLIENT: true,
       APP_HOST: JSON.stringify(process.env.APP_HOST || "localhost"),
       APP_PORT: JSON.stringify(process.env.APP_PORT || 8080),
       APP_HTTPS: JSON.stringify(process.env.APP_HTTPS ? "https" : "http"),
       "process.env": {
         NODE_ENV: JSON.stringify("production"),
       },
+    }),
+    new webpack.ProvidePlugin({
+      THREE: "three",
     }),
     new Uglify(),
     new CompressionPlugin({
@@ -167,6 +180,16 @@ const server = {
         },
         include: path.resolve("src", "static", "fonts"),
       },
+      {
+        test: /\.glb$/,
+        loader: "file-loader",
+        options: {
+          emitFile: false,
+          outputPath: "models/",
+          name: "[hash].[ext]",
+        },
+        include: path.resolve("src", "static", "models"),
+      },
     ],
   },
   resolve: {
@@ -176,13 +199,18 @@ const server = {
   externals: [nodeExternals()],
   plugins: [
     new webpack.DefinePlugin({
-      DEV: true,
+      DEV: false,
+      CLIENT: false,
       APP_HOST: JSON.stringify(process.env.APP_HOST || "localhost"),
       APP_PORT: JSON.stringify(process.env.APP_PORT || 8080),
       APP_HTTPS: JSON.stringify(process.env.APP_HTTPS ? "https" : "http"),
       "process.env": {
         NODE_ENV: JSON.stringify("production"),
       },
+    }),
+    new webpack.IgnorePlugin(/GLTFLoader/),
+    new webpack.ProvidePlugin({
+      THREE: "three",
     }),
     new Uglify(),
   ],

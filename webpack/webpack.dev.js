@@ -65,6 +65,15 @@ const client = {
         },
         include: path.resolve("src", "static", "fonts"),
       },
+      {
+        test: /\.glb$/,
+        loader: "file-loader",
+        options: {
+          outputPath: "models/",
+          name: "[hash].[ext]",
+        },
+        include: path.resolve("src", "static", "models"),
+      },
     ],
   },
   resolve: {
@@ -74,8 +83,12 @@ const client = {
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.ProvidePlugin({
+      THREE: "three",
+    }),
     new webpack.DefinePlugin({
       DEV: true,
+      CLIENT: true,
       APP_HOST: JSON.stringify(process.env.APP_HOST || "localhost"),
       APP_PORT: JSON.stringify(process.env.APP_PORT || 8080),
       APP_HTTPS: JSON.stringify(process.env.APP_HTTPS ? "https" : "http"),
@@ -154,6 +167,16 @@ const server = {
         },
         include: path.resolve("src", "static", "fonts"),
       },
+      {
+        test: /\.glb$/,
+        loader: "file-loader",
+        options: {
+          emitFile: false,
+          outputPath: "models/",
+          name: "[hash].[ext]",
+        },
+        include: path.resolve("src", "static", "models"),
+      },
     ],
   },
   resolve: {
@@ -163,9 +186,14 @@ const server = {
   plugins: [
     new webpack.DefinePlugin({
       DEV: true,
+      CLIENT: false,
       APP_HOST: JSON.stringify(process.env.APP_HOST || "localhost"),
       APP_PORT: JSON.stringify(process.env.APP_PORT || 8080),
       APP_HTTPS: JSON.stringify(process.env.APP_HTTPS ? "https" : "http"),
+    }),
+    new webpack.IgnorePlugin(/GLTFLoader/),
+    new webpack.ProvidePlugin({
+      THREE: "three",
     }),
   ],
 }

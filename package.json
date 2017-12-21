@@ -10,9 +10,11 @@
   },
   "scripts": {
     "test": "eslint src/*",
-    "db": "cross-env sh ./db.create.sh",
+    "build:db": "cross-env sh ./db.create.sh",
     "dev": "cross-env DEV=true node api/server.js",
-    "prod": "cross-env rimraf ./build/* && webpack --config ./webpack/webpack.prod.js && node api/server.js"
+    "build:prod":
+      "cross-env rimraf ./build/* && webpack --config ./webpack/webpack.prod.js",
+    "start:prod": "cross-env node api/server.js"
   },
   "author": "Jason Miller",
   "license": "ISC",

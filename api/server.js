@@ -83,7 +83,7 @@ if (DEV === "true") {
     .use(koaBodyparser())
     .use(routes)
     .use(router.allowedMethods())
-    .use(server("lol"))
+    .use(server())
 }
 
 databaseConn(db)

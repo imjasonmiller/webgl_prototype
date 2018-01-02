@@ -77,6 +77,24 @@ const client = {
         },
         include: path.resolve("src", "static", "models"),
       },
+      {
+        test: /\.glsl$/,
+        loader: "file-loader",
+        options: {
+          outputPath: "shaders/",
+          name: "[hash].[ext]",
+        },
+        include: path.resolve("src", "static", "shaders"),
+      },
+      {
+        test: /\.ico$/,
+        loader: "file-loader",
+        options: {
+          outputPath: "/",
+          name: "[name].[ext]",
+        },
+        include: path.resolve("src", "static", "images"),
+      },
     ],
   },
   resolve: {
@@ -189,6 +207,26 @@ const server = {
           name: "[hash].[ext]",
         },
         include: path.resolve("src", "static", "models"),
+      },
+      {
+        test: /\.glsl$/,
+        loader: "file-loader",
+        options: {
+          emitFile: false,
+          outputPath: "shaders/",
+          name: "[hash].[ext]",
+        },
+        include: path.resolve("src", "static", "shaders"),
+      },
+      {
+        test: /\.ico$/,
+        loader: "file-loader",
+        options: {
+          emitFile: false,
+          outputPath: "/",
+          name: "[name].[ext]",
+        },
+        include: path.resolve("src", "static", "images"),
       },
     ],
   },

@@ -41,13 +41,13 @@ class Overlay extends Component {
   constructor() {
     super()
     this.state = {
-      modalConfig: false,
+      // modalConfig: false,
     }
   }
 
-  handleConfig() {
-    console.log("Config")
-  }
+  // handleConfig() {
+  //   console.log("Config")
+  // }
 
   handleLogout() {
     this.props.dispatch({ type: "LOGOUT_REQUEST" })

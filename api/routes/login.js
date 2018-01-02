@@ -10,6 +10,9 @@ module.exports = (router, connector) => {
     .delete("/api/token", async ctx => {
       await users.deleteToken(ctx)
     })
+    .get("/api/player/me", async ctx => {
+      await users.getPlayer(ctx)
+    })
 
   return router.routes()
 }

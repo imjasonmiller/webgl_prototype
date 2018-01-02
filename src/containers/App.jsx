@@ -6,7 +6,7 @@ import { connect } from "react-redux"
 import { IntlProvider, addLocaleData } from "react-intl"
 import debounce from "lodash/debounce"
 
-import { windowResize } from "actions/window"
+import { resizeWindow } from "actions/window"
 
 import { Auth, Game } from "containers"
 
@@ -33,6 +33,9 @@ const theme = {
   fontHead: "Roboto, sans-serif",
   fontBody: "'Helvetica Neue', Helvetica, Arial, sans-serif",
 }
+
+// Favicon
+require("static/images/favicon.ico")
 
 const fontRobotoBlack = require("static/fonts/roboto-v18-latin-900.woff2")
 
@@ -98,7 +101,7 @@ class App extends Component {
   handleResize() {
     // Get pixel ratio and window size
     this.props.dispatch(
-      windowResize(
+      resizeWindow(
         window.innerWidth,
         window.innerHeight,
         window.devicePixelRatio,

@@ -35,9 +35,9 @@ Make sure to create a `.env` file with the environment variables below, although
 | APP_HOST   | `localhost`       |
 | APP_PORT   | `8080`            |
 | APP_HTTPS  | `false`           |
-| APP_SECRET |                   |
+| APP_SECRET | `undefined`       |
 | DB_USER    | `postgres`        |
-| DB_PASS    |
+| DB_PASS    | `undefined`       |
 | DB_HOST    | `localhost`       |
 | DB_PORT    | `5432`            |
 | DB_NAME    | `webgl_prototype` |

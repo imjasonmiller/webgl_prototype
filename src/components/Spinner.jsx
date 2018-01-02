@@ -4,8 +4,8 @@ import styled from "styled-components"
 import debounce from "lodash/debounce"
 
 /**
- * To account for the hypotenuse length after rotation,
- * the canvas is scaled down by 0.707 ≈ width / sqrt(width^2 + width^2)
+ * To account for the increase in width after rotation, the
+ * canvas is scaled down by width / hypotenuse ≈ 0.7071067
  */
 const Canvas = styled.canvas`
   display: block;
@@ -13,7 +13,7 @@ const Canvas = styled.canvas`
   transform: scale(0.7071067) rotate(-45deg);
 `
 
-class Loader extends Component {
+class Spinner extends Component {
   componentDidMount() {
     this.ctx = this.canvas.getContext("2d")
 
@@ -178,16 +178,16 @@ class Loader extends Component {
   }
 }
 
-Loader.defaultProps = {
+Spinner.defaultProps = {
   color: "rgb(251, 163, 10)",
   size: 100,
   speed: 1,
 }
 
-Loader.propTypes = {
+Spinner.propTypes = {
   color: PropTypes.string,
   size: PropTypes.number,
   speed: PropTypes.number,
 }
 
-export default Loader
+export default Spinner

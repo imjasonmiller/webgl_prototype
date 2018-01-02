@@ -14,19 +14,18 @@ require("dotenv").config()
 
 const { APP_SECRET } = process.env
 
-const store = configureStore()
-const initialState = store.getState()
-
 const server = () => async ctx => {
+  const store = configureStore()
+  const initialState = store.getState()
+
   jwt.verify(
     ctx.cookies.get("token"),
     APP_SECRET,
-    {
-      algorithms: ["HS512"],
-    },
-    err => {
+    { algorithms: ["HS512"] },
+    (err, data) => {
       if (!err) {
         initialState.player.authenticated = true
+        initialState.config.locale = data.locale
       }
     },
   )
@@ -47,6 +46,7 @@ const server = () => async ctx => {
     ctx.redirect(context.url)
   } else {
     const styleTags = styleSheet.getStyleTags()
+
     ctx.type = "html"
     ctx.body = `
       <!DOCTYPE html>

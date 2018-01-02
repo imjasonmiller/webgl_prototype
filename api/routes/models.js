@@ -30,17 +30,21 @@ class Users {
   createToken(ctx) {
     const { user, pass } = ctx.request.body
 
-    return this.connector("users")
-      .first("user_name as name", "user_pass as pass")
-      .where("user_name", user)
+    return this.connector("players")
+      .first(
+        "player_name as name",
+        "player_pass as pass",
+        "player_locale as locale",
+      )
+      .where("player_name", user)
       .then(res => {
         if (res && bcrypt.compareSync(pass, res.pass)) {
           const xsrf = tokens.create("?s789#3msd823!x")
           const token = jwt.sign(
             {
               xsrf,
-              // id: res.id,
               sub: res.name,
+              locale: res.locale,
             },
             APP_SECRET,
             {
@@ -80,6 +84,30 @@ class Users {
         () => {
           ctx.status = 401
         },
+      )
+      .catch(err => ctx.throw(500, err.message))
+  }
+
+  getPlayer(ctx) {
+    // ctx.params.id
+    return this.constructor
+      .verifyToken(ctx.cookies.get("token"), ctx.cookies.get("xsrf"))
+      .then(
+        token =>
+          this.connector("players")
+            .first(
+              "player_name as name",
+              "player_locale as locale",
+              "player_terrain as terrain",
+            )
+            .where("player_name", token.sub)
+            .then(res => {
+              ctx.body = {
+                locale: res.locale,
+                terrain: res.terrain,
+              }
+            }),
+        () => ctx.throw(401, "Unauthorized"),
       )
       .catch(err => ctx.throw(500, err.message))
   }

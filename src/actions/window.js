@@ -3,7 +3,7 @@ export const windowScroll = scrollHeight => ({
   scrollHeight,
 })
 
-export const windowResize = (width, height, pixelRatio) => ({
+export const resizeWindow = (width, height, pixelRatio) => ({
   type: "WINDOW_RESIZE",
   width,
   height,

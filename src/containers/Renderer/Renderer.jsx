@@ -3,20 +3,19 @@ import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import React3 from "react-three-renderer"
 
-import { World } from "containers/Renderer/Meshes"
-
-// eslint-disable-next-line
-if (CLIENT) require("three/examples/js/loaders/GLTFLoader")
-
-const home = require("static/models/home.glb")
+import { CelestialBody, Terrain } from "containers/Renderer/Meshes"
 
 class Renderer extends Component {
   constructor() {
     super()
 
     this.state = {
+      timeNow: Date.now(),
+      // timeDelta: Date.now(),
       pivotRotation: new THREE.Euler(),
     }
+
+    this.gameTime = new THREE.Clock()
 
     this.origin = new THREE.Vector3(0, 0, 0)
     this.cameraPosition = new THREE.Vector3(0, 200, 500)
@@ -24,33 +23,6 @@ class Renderer extends Component {
 
   componentDidMount() {
     this.composer()
-    const loader = new THREE.GLTFLoader()
-    loader.load(
-      home,
-      data => {
-        const model = data.scene
-
-        let i = 0
-        model.traverse(node => {
-          if (node.isMesh) {
-            // node.material = mats[i++]
-            node.geometry.computeVertexNormals()
-          }
-        })
-
-        model.scale.x = 0.1
-        model.scale.y = 0.1
-        model.scale.z = 0.1
-
-        // this.scene.add(model)
-      },
-      xhr => {
-        console.log(`${xhr.loaded / xhr.total * 100}% loaded`)
-      },
-      err => {
-        console.log("Err:", err)
-      },
-    )
   }
 
   componentWillUnmount() {
@@ -59,8 +31,12 @@ class Renderer extends Component {
 
   composer() {
     this.setState({
-      pivotRotation: new THREE.Euler(0, this.state.pivotRotation.y + 0.01, 0),
+      timeNow: Date.now(),
+      // timeDelta: Date.now() - this.state.timeNow,
+      // pivotRotation: new THREE.Euler(0, this.state.pivotRotation.y + 0.01, 0),
     })
+
+    // console.log(this.state.timeNow, this.state.timeDelta)
 
     this.webGLRenderer.render(this.scene, this.camera)
 
@@ -117,28 +93,67 @@ class Renderer extends Component {
               }}
             />
           </object3D>
+
           <ambientLight intensity={1} />
-          <World
+
+          <Terrain
             width={500}
             height={500}
             depth={500}
             widthSegments={28}
             heightSegments={1}
             depthSegments={28}
+            terrain={this.props.terrain}
           />
+
+          <group
+            rotation={
+              new THREE.Euler(
+                // Altitude, highest angle being 30 degrees
+                Math.PI / 6,
+                // Rotational speed, every 15000 ms = 1 rotation
+                Math.PI * 2 * ((this.state.timeNow % 15000) / 15000),
+                0,
+              )
+            }
+          >
+            <CelestialBody
+              name="sun"
+              color={new THREE.Color(0xe68c21)}
+              position={new THREE.Vector3(0, 0, 750)}
+              time={this.state.timeNow}
+            />
+
+            <CelestialBody
+              name="moon"
+              color={new THREE.Color(0xbfbfbf)}
+              position={new THREE.Vector3(0, 0, -750)}
+              time={this.state.timeNow}
+            />
+          </group>
         </scene>
       </React3>
     )
   }
 }
 
+/**
+ * All props are passed down to their components here due to a bug
+ * @see https://github.com/toxicFork/react-three-renderer/issues/140
+ */
 Renderer.propTypes = {
+  // player
+  terrain: PropTypes.arrayOf(PropTypes.number).isRequired,
+  // window
   winWidth: PropTypes.number.isRequired,
   winHeight: PropTypes.number.isRequired,
   pixelRatio: PropTypes.number.isRequired,
 }
 
 const mapStateToProps = state => ({
+  // player
+  terrain: state.player.terrain,
+  // window
   winWidth: state.window.width,
   winHeight: state.window.height,
   pixelRatio: state.window.pixelRatio,

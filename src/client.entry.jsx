@@ -9,6 +9,10 @@ import App from "./containers/App"
 import configureStore from "./store"
 
 const state = window.initialState || {}
+
+// Garbage collect state
+delete window.initialState
+
 const store = configureStore(state)
 
 const hydrate = Component => {

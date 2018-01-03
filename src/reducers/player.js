@@ -21,6 +21,11 @@ const player = (state = initialState, action) => {
         ...state,
         locale: action.locale,
       }
+    case "CAMERA_ROTATION":
+      return {
+        ...state,
+        cameraRotation: state.cameraRotation + 90,
+      }
     case "MODIFY_TERRAIN":
       return {
         ...state,

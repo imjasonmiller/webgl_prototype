@@ -6,6 +6,10 @@ import media from "style-utils/media"
 
 import { ButtonStats, ButtonTool } from "components"
 
+import { Compass } from "containers"
+
+import { rotateCamera } from "actions/player"
+
 const iconConfig = require("static/images/icon_config.svg")
 const iconLogout = require("static/images/icon_logout.svg")
 
@@ -49,6 +53,9 @@ class Overlay extends Component {
   //   console.log("Config")
   // }
 
+  handleCameraRotation() {
+    this.props.dispatch(rotateCamera())
+  }
   handleLogout() {
     this.props.dispatch({ type: "LOGOUT_REQUEST" })
   }
@@ -68,6 +75,10 @@ class Overlay extends Component {
             onClick={() => this.handleLogout()}
           />
         </Stats>
+        <Compass
+          cameraRotation={this.props.cameraRotation}
+          handleCameraRotation={() => this.handleCameraRotation()}
+        />
         <Controls>
           <ButtonTool alt="Select construct" src={iconSelect} />
           <ButtonTool alt="Create construct" src={iconCreate} />
@@ -80,7 +91,12 @@ class Overlay extends Component {
 }
 
 Overlay.propTypes = {
+  cameraRotation: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
 }
 
-export default connect()(Overlay)
+const mapStateToProps = state => ({
+  cameraRotation: state.player.cameraRotation,
+})
+
+export default connect(mapStateToProps)(Overlay)

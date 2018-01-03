@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import React3 from "react-three-renderer"
+import Animated from "animated/lib/targets/react-dom"
 
 import { CelestialBody, Terrain } from "containers/Renderer/Meshes"
 
@@ -12,20 +13,43 @@ class Renderer extends Component {
     this.state = {
       timeNow: Date.now(),
       // timeDelta: Date.now(),
-      pivotRotation: new THREE.Euler(),
     }
 
     this.gameTime = new THREE.Clock()
 
     this.origin = new THREE.Vector3(0, 0, 0)
+
     this.cameraPosition = new THREE.Vector3(0, 200, 500)
+
+    this.cameraPivotRotation = new Animated.Value(0)
+    this.cameraPivotRotation
+      .interpolate({
+        inputRange: [0, 360],
+        outputRange: [0, 6.2831],
+      })
+      .addListener(({ value }) => {
+        this.cameraPivot.rotation.y = value
+      })
   }
 
   componentDidMount() {
     this.composer()
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { cameraRotation } = nextProps
+
+    if (this.props.cameraRotation !== cameraRotation) {
+      Animated.spring(this.cameraPivotRotation, {
+        toValue: cameraRotation,
+        tension: 150,
+        friction: 100,
+      }).start()
+    }
+  }
+
   componentWillUnmount() {
+    this.cameraPivotRotation.removeListener()
     window.cancelAnimationFrame(this.raf)
   }
 
@@ -75,7 +99,6 @@ class Renderer extends Component {
           }}
         >
           <object3D
-            rotation={this.state.pivotRotation}
             ref={c => {
               this.cameraPivot = c
             }}
@@ -103,7 +126,7 @@ class Renderer extends Component {
             widthSegments={28}
             heightSegments={1}
             depthSegments={28}
-            terrain={this.props.terrain}
+            vertices={this.props.terrainVerts}
           />
 
           <group
@@ -143,7 +166,8 @@ class Renderer extends Component {
  */
 Renderer.propTypes = {
   // player
-  terrain: PropTypes.arrayOf(PropTypes.number).isRequired,
+  cameraRotation: PropTypes.number.isRequired,
+  terrainVerts: PropTypes.arrayOf(PropTypes.number).isRequired,
   // window
   winWidth: PropTypes.number.isRequired,
   winHeight: PropTypes.number.isRequired,
@@ -152,7 +176,8 @@ Renderer.propTypes = {
 
 const mapStateToProps = state => ({
   // player
-  terrain: state.player.terrain,
+  cameraRotation: state.player.cameraRotation,
+  terrainVerts: state.player.terrain,
   // window
   winWidth: state.window.width,
   winHeight: state.window.height,

@@ -12,14 +12,14 @@
     "test": "cross-env eslint --ext .js --ext .jsx src",
     "db": "cross-env sh ./db.create.sh",
     "dev": "cross-env DEV=true node api/server.js",
-    "prod:build":
-      "cross-env rimraf ./build/* && webpack --config ./webpack/webpack.prod.js",
+    "prod:build": "cross-env rimraf ./build/* && webpack --config ./webpack/webpack.prod.js",
     "prod:start": "cross-env node api/server.js"
   },
   "author": "Jason Miller",
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.35",
+    "animated": "^0.2.1",
     "babel-loader": "^8.0.0-beta.0",
     "bcryptjs": "^2.4.3",
     "bunyan": "^1.8.12",

@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import PropTypes from "prop-types"
 import { AltBoxBufferGeometry } from "containers/Renderer/Geometry"
 
 import { Loader } from "containers"
@@ -22,7 +23,9 @@ class Terrain extends Component {
   componentWillUnmount() {
     // Remove mesh from scene
     this.terrain.geometry.dispose()
-    this.terrain.material.dispose()
+    this.terrain.material.forEach(material => {
+      material.dispose()
+    })
     this.group.remove(this.terrain)
     this.terrain = undefined
 
@@ -48,6 +51,11 @@ class Terrain extends Component {
       new THREE.MeshBasicMaterial({ color: 0x0000ff }),
     ]
 
+    // Add vertices that were loaded from the database
+    this.props.vertices.forEach((val, index) => {
+      geo.vertices[index].y = val
+    })
+
     this.terrain = new THREE.Mesh(geo, mat)
     this.terrain.name = "terrain"
 
@@ -68,6 +76,10 @@ class Terrain extends Component {
       />
     )
   }
+}
+
+Terrain.propTypes = {
+  vertices: PropTypes.arrayOf(PropTypes.number).isRequired,
 }
 
 export default Terrain

@@ -118,12 +118,14 @@ class Modal extends Component {
             tension: 250,
             friction: 30,
           }),
-        ]).start(() => this.props.handleHide())
+        ]).start(({ finished }) => {
+          if (finished) {
+            this.setState({ showModal: false })
+          }
+        })
       }
     }
   }
-
-  componentWillUnmount() {}
 
   render() {
     const backgroundStyle = {

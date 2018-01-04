@@ -45,5 +45,6 @@ Make sure to create a `.env` file with the environment variables below, although
 #### Testing
 
 ```
-$ npm run test       # lint code using ESLint
+$ npm test              # test code using Jest
+$ npm run lint          # lint code using ESLint
 ```

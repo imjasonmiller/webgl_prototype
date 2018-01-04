@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import styled from "styled-components"
 import media from "style-utils/media"
 
-import { ButtonStats, ButtonTool } from "components"
+import { ButtonStats, ButtonTool, Modal } from "components"
 
 import { Compass } from "containers"
 
@@ -45,13 +45,17 @@ class Overlay extends Component {
   constructor() {
     super()
     this.state = {
-      // modalConfig: false,
+      modalConfig: false,
     }
   }
 
-  // handleConfig() {
-  //   console.log("Config")
-  // }
+  handleShowConfig() {
+    this.setState({ modalConfig: true })
+  }
+
+  handleHideConfig() {
+    this.setState({ modalConfig: false })
+  }
 
   handleCameraRotation() {
     this.props.dispatch(rotateCamera())
@@ -67,8 +71,15 @@ class Overlay extends Component {
           <ButtonStats
             alt="Config"
             src={iconConfig}
-            onClick={() => this.handleConfig()}
+            onClick={() => this.handleShowConfig()}
           />
+          <Modal
+            isOpen={this.state.modalConfig}
+            heading="Configuration"
+            handleHide={() => this.handleHideConfig()}
+          >
+            This is an example modal
+          </Modal>
           <ButtonStats
             alt="Logout"
             src={iconLogout}

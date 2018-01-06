@@ -72,6 +72,7 @@ class Modal extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.isOpen !== nextProps.isOpen) {
       if (nextProps.isOpen) {
+        // Open animation
         this.setState({ showModal: true })
 
         Animated.sequence([
@@ -99,6 +100,7 @@ class Modal extends Component {
           }),
         ]).start()
       } else {
+        // Close animation
         Animated.sequence([
           Animated.timing(this.backgroundIndex, {
             toValue: 1,

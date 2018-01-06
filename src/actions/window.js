@@ -1,6 +1,5 @@
-export const windowScroll = scrollHeight => ({
-  type: "WINDOW_SCROLL",
-  scrollHeight,
+export const incrementUID = () => ({
+  type: "INCREMENT_UID",
 })
 
 export const resizeWindow = (width, height, pixelRatio) => ({
@@ -8,4 +7,9 @@ export const resizeWindow = (width, height, pixelRatio) => ({
   width,
   height,
   pixelRatio,
+})
+
+export const windowScroll = scrollHeight => ({
+  type: "WINDOW_SCROLL",
+  scrollHeight,
 })

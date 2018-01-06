@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import styled, { withTheme } from "styled-components"
-import { Loader, Overlay, Renderer } from "containers"
+import { Loader, Overlay, Renderer, Time } from "containers"
 
 import { Spinner } from "components"
 
@@ -43,6 +43,8 @@ class Game extends Component {
       return Object.assign(acc, { [key]: val })
     }, {})
 
+    const fetchStart = (performance || Date).now()
+
     return fetch(`${APP_HTTPS}://${APP_HOST}:${APP_PORT}/api/player/me`, {
       method: "GET",
       credentials: "same-origin",
@@ -52,13 +54,14 @@ class Game extends Component {
     })
       .then(res => res.json())
       .then(data => {
-        // Dispatch
+        const fetchTime = (performance || Date).now() - fetchStart
+        // Time.setTime(data.time + fetchTime)
         this.props.dispatch(modifyTerrain(data.terrain))
         this.setState({ loaded: true })
       })
-    // .catch(err => this.props.dispatch(showToast(
-    //   "Could not retrieve player data"
-    // )))
+      .catch(err => {
+        // Handle error
+      })
   }
 
   render() {

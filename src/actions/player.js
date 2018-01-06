@@ -3,6 +3,16 @@ export const changeLocale = locale => ({
   locale,
 })
 
+export const changeAvatarFaceColor = color => ({
+  type: "CHANGE_AVATAR_FACE_COLOR",
+  color,
+})
+
+export const changeAvatarFaceOption = option => ({
+  type: "CHANGE_AVATAR_FACE_OPTION",
+  option,
+})
+
 export const modifyTerrain = terrain => ({
   type: "TERRAIN_MODIFY",
   terrain,

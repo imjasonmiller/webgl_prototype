@@ -25,6 +25,14 @@ class Loader {
         src: require("static/shaders/celestialbody_frag.glsl"),
       },
       {
+        name: "skybox_vert",
+        src: require("static/shaders/skybox_vert.glsl"),
+      },
+      {
+        name: "skybox_frag",
+        src: require("static/shaders/skybox_frag.glsl"),
+      },
+      {
         name: "terrain_vert",
         src: require("static/shaders/terrain_vert.glsl"),
       },

@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import styled from "styled-components"
 import media from "style-utils/media"
 
-import { ButtonStats, ButtonTool, Modal } from "components"
+import { ButtonAvatar, ButtonStats, ButtonTool, Modal } from "components"
 
 import { Compass } from "containers"
 
@@ -45,6 +45,7 @@ class Overlay extends Component {
   constructor() {
     super()
     this.state = {
+      modalAvatar: false,
       modalConfig: false,
     }
   }
@@ -55,6 +56,14 @@ class Overlay extends Component {
 
   handleHideConfig() {
     this.setState({ modalConfig: false })
+  }
+
+  handleShowAvatar() {
+    this.setState({ modalAvatar: true })
+  }
+
+  handleHideAvatar() {
+    this.setState({ modalAvatar: false })
   }
 
   handleCameraRotation() {
@@ -78,7 +87,7 @@ class Overlay extends Component {
             heading="Configuration"
             handleHide={() => this.handleHideConfig()}
           >
-            This is an example modal
+            This is the settings modal
           </Modal>
           <ButtonStats
             alt="Logout"
@@ -93,6 +102,14 @@ class Overlay extends Component {
         <Controls>
           <ButtonTool alt="Select construct" src={iconSelect} />
           <ButtonTool alt="Create construct" src={iconCreate} />
+          <ButtonAvatar onClick={() => this.handleShowAvatar()} />
+          <Modal
+            isOpen={this.state.modalAvatar}
+            heading="Avatar"
+            handleHide={() => this.handleHideAvatar()}
+          >
+            This is the avatar modal
+          </Modal>
           <ButtonTool alt="Lower terrain" src={iconLower} />
           <ButtonTool alt="Raise terrain" src={iconRaise} />
         </Controls>
@@ -107,6 +124,7 @@ Overlay.propTypes = {
 }
 
 const mapStateToProps = state => ({
+  serverTime: state.player.serverTime,
   cameraRotation: state.player.cameraRotation,
 })
 

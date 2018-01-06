@@ -27,7 +27,8 @@ class Close extends Component {
     this.arcVal = 0
     this.lineValA = 0
     this.lineValB = 0
-
+  }
+  componentDidMount() {
     // Listeners will update the values above
     this.arc_ID = this.arc.addListener(({ value }) => {
       this.arcVal = value
@@ -40,8 +41,7 @@ class Close extends Component {
     this.lineB_ID = this.lineB.addListener(value => {
       this.lineValB = value
     })
-  }
-  componentDidMount() {
+
     this.ctx = this.canvas.getContext("2d")
     this.ctx.scale(this.ratio, this.ratio)
 

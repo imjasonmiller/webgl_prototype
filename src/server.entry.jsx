@@ -26,6 +26,13 @@ const server = () => async ctx => {
       if (!err) {
         initialState.player.authenticated = true
         initialState.config.locale = data.locale
+      } else {
+        initialState.config.locale = ctx.acceptsLanguages(
+          "en",
+          "hr",
+          "nl",
+          "pt",
+        )
       }
     },
   )

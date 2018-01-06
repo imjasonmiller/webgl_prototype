@@ -18,8 +18,8 @@ class Users {
       jwt.verify(token, APP_SECRET, (err, payload) => {
         if (err) {
           reject(err)
-        } else if (payload.xsrf !== xsrf) {
-          reject(new Error("Invalid xsrf"))
+        } else if (!tokens.verify(payload.xsrf, xsrf)) {
+          reject(new Error("Token mismatch"))
         }
 
         resolve(payload)
@@ -37,13 +37,15 @@ class Users {
         "player_locale as locale",
       )
       .where("player_name", user)
-      .then(res => {
-        if (res && bcrypt.compareSync(pass, res.pass)) {
-          const xsrf = tokens.create("?s789#3msd823!x")
+      .then(async res => {
+        if (res && (await bcrypt.compare(pass, res.pass))) {
+          const xsrfSecret = await tokens.secret()
+          const xsrfToken = tokens.create(xsrfSecret)
+
           const token = jwt.sign(
             {
-              xsrf,
               sub: res.name,
+              xsrf: xsrfSecret,
               locale: res.locale,
             },
             APP_SECRET,
@@ -54,7 +56,10 @@ class Users {
           )
 
           ctx.cookies.set("token", token, { httpOnly: true, maxAge: 600000 })
-          ctx.cookies.set("xsrf", xsrf, { httpOnly: false, maxAge: 600000 })
+          ctx.cookies.set("xsrf", xsrfToken, {
+            httpOnly: false,
+            maxAge: 600000,
+          })
 
           ctx.body = { token }
         } else {
@@ -89,27 +94,28 @@ class Users {
   }
 
   getPlayer(ctx) {
-    // ctx.params.id
     return this.constructor
-      .verifyToken(ctx.cookies.get("token"), ctx.cookies.get("xsrf"))
-      .then(
-        token =>
-          this.connector("players")
-            .first(
-              "player_name as name",
-              "player_locale as locale",
-              "player_terrain as terrain",
-            )
-            .where("player_name", token.sub)
-            .then(res => {
-              ctx.body = {
-                locale: res.locale,
-                terrain: res.terrain,
-              }
-            }),
-        () => ctx.throw(401, "Unauthorized"),
+      .verifyToken(ctx.cookies.get("token"), ctx.request.get("xsrf"))
+      .then(token =>
+        this.connector("players")
+          .first(
+            "player_name as name",
+            "player_locale as locale",
+            "player_terrain as terrain",
+          )
+          .where("player_name", token.sub)
+          .then(res => {
+            ctx.body = {
+              time: Date.now(),
+              locale: res.locale,
+              terrain: res.terrain,
+            }
+          }),
       )
-      .catch(err => ctx.throw(500, err.message))
+      .catch(err => {
+        ctx.throw(401, err.message)
+        // ctx.redirect("/auth")
+      })
   }
 }
 

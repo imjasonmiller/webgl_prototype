@@ -1,3 +1,4 @@
+export { default as ButtonAvatar } from "./ButtonAvatar"
 export { default as ButtonStats } from "./ButtonStats"
 export { default as ButtonTool } from "./ButtonTool"
 

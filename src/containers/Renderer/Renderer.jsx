@@ -4,7 +4,9 @@ import { connect } from "react-redux"
 import React3 from "react-three-renderer"
 import Animated from "animated/lib/targets/react-dom"
 
-import { CelestialBody, Terrain } from "containers/Renderer/Meshes"
+import { Time } from "containers"
+
+import { CelestialBody, Skybox, Terrain } from "containers/Renderer/Meshes"
 
 class Renderer extends Component {
   constructor() {
@@ -49,7 +51,7 @@ class Renderer extends Component {
   }
 
   componentWillUnmount() {
-    this.cameraPivotRotation.removeListener()
+    this.cameraPivotRotation.removeAllListeners()
     window.cancelAnimationFrame(this.raf)
   }
 
@@ -107,8 +109,8 @@ class Renderer extends Component {
               name="camera"
               fov={75}
               aspect={winWidth / winHeight}
-              near={0.1}
-              far={1000}
+              near={10}
+              far={2000}
               lookAt={this.origin}
               position={this.cameraPosition}
               ref={c => {
@@ -128,6 +130,8 @@ class Renderer extends Component {
             depthSegments={28}
             vertices={this.props.terrainVerts}
           />
+
+          <Skybox time={Time.getTime()} />
 
           <group
             rotation={

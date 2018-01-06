@@ -61,7 +61,7 @@ class Game extends Component {
         this.setState({ loaded: true })
       })
       .catch(() => {
-        this.props.history.push("/auth")
+        this.props.history.push("/")
       })
   }
 

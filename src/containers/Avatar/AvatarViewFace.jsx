@@ -40,8 +40,8 @@ class AvatarViewFace extends Component {
    */
   static interpolatePath(value, source, target) {
     // RegEx for number (positions) and non-number (commands) path data
-    const NaNExp = /[^\d\-.]/g
-    const NumExp = /(-)?(\d|\.)+/g
+    const NaNExp = /[^\de\-.]/g
+    const NumExp = /(-)?(\d|e|\.)+/g
 
     const commands = source.match(NaNExp)
     const sourcePos = source.match(NumExp)
@@ -57,7 +57,7 @@ class AvatarViewFace extends Component {
         parseFloat(targetPos[i]) - parseFloat(sourcePos[i])
       ) * value
 
-      tween.push(command + position)
+      tween.push(command + position.toFixed(3))
     }
 
     return tween.join("")

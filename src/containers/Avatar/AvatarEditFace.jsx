@@ -73,19 +73,6 @@ class AvatarEditFace extends Component {
         <OptionCircle cx="312.4" cy="248.2" r="15" />
       </OptionSVG>
     ))
-    // const Options = FaceData.options.map((option, index) => (
-    //   <Option viewBox="0 0 500 500">
-    //     <OptionPath d="M370,215.6v-18.1c0-66.3-53.7-120-120-120s-120,53.7-120,120v18.1c-15.9,0-28.8,12.9-28.8,28.8
-    //       c0,15.9,12.9,28.8,28.8,28.8v44.3c0,66.3,53.7,120,120,120s120-53.7,120-120v-44.3c15.9,0,28.8-12.9,28.8-28.8
-    //       C398.8,228.5,385.9,215.6,370,215.6z" />
-    //     <OptionPath d={option.nose} />
-    //     <OptionPath d={option.mouth} />
-    //     <OptionPath d={option.eyebrowLeft} />
-    //     <OptionPath d={option.eyebrowRight} />
-    //     <OptionCicle cx="187.4" cy="248.2" r="15"/>
-    //     <OptionCicle cx="312.4" cy="248.2" r="15"/>
-    //   <Option />
-    // ))
 
     return <OptionPicker>{Options}</OptionPicker>
   }

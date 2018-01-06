@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
+import { withRouter } from "react-router-dom"
 import styled, { withTheme } from "styled-components"
 import { Loader, Overlay, Renderer, Time } from "containers"
 
@@ -43,7 +44,7 @@ class Game extends Component {
       return Object.assign(acc, { [key]: val })
     }, {})
 
-    const fetchStart = (performance || Date).now()
+    // const fetchStart = (performance || Date).now()
 
     return fetch(`${APP_HTTPS}://${APP_HOST}:${APP_PORT}/api/player/me`, {
       method: "GET",
@@ -54,13 +55,13 @@ class Game extends Component {
     })
       .then(res => res.json())
       .then(data => {
-        const fetchTime = (performance || Date).now() - fetchStart
+        // const fetchTime = (performance || Date).now() - fetchStart
         // Time.setTime(data.time + fetchTime)
         this.props.dispatch(modifyTerrain(data.terrain))
         this.setState({ loaded: true })
       })
-      .catch(err => {
-        // Handle error
+      .catch(() => {
+        this.props.history.push("/auth")
       })
   }
 
@@ -85,9 +86,12 @@ class Game extends Component {
 
 Game.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
   theme: PropTypes.shape({
     orange: PropTypes.string.isRequired,
   }).isRequired,
 }
 
-export default connect()(withTheme(Game))
+export default withRouter(connect()(withTheme(Game)))

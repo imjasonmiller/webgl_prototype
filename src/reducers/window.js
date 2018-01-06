@@ -3,6 +3,8 @@ const initialState = {
   width: 0,
   height: 0,
   pixelRatio: 0,
+  modalHeight: 0,
+  modalScroll: 0,
 }
 
 const window = (state = initialState, action) => {
@@ -18,6 +20,12 @@ const window = (state = initialState, action) => {
       return {
         ...state,
         uid: state.uid + 1,
+      }
+    case "MODAL_UPDATE":
+      return {
+        ...state,
+        modalScroll: action.scroll,
+        modalHeight: action.height,
       }
     default:
       return state

@@ -1,8 +1,4 @@
 uniform float time;
-uniform vec3 upperColorMorning;
-uniform vec3 lowerColorMorning;
-uniform vec3 upperColorEvening;
-uniform vec3 lowerColorEvening;
 
 varying vec3 vWorldPosition;
 

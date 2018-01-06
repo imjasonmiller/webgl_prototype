@@ -4,6 +4,7 @@ import styled from "styled-components"
 import Animated from "animated/lib/targets/react-dom"
 
 import Close from "./Close"
+import Content from "./Content"
 
 const Wrap = styled.div`
   position: fixed;
@@ -46,15 +47,6 @@ const Heading = styled.h2`
   color: ${props => props.theme.yellow};
 `
 
-const Content = styled.div`
-  position: relative;
-  padding: 0 1em;
-  height: 100%;
-  overflow-y: scroll;
-  -webkit-overflow-scroling: touch;
-  color: ${props => props.theme.mineshaft};
-`
-
 class Modal extends Component {
   constructor() {
     super()
@@ -67,13 +59,11 @@ class Modal extends Component {
     this.foregroundOpacity = new Animated.Value(0)
   }
 
-  componentDidMount() {}
-
   componentWillReceiveProps(nextProps) {
     if (this.props.isOpen !== nextProps.isOpen) {
       if (nextProps.isOpen) {
         // Open animation
-        this.setState({ showModal: true })
+        this.setState(() => ({ showModal: true }))
 
         Animated.sequence([
           Animated.timing(this.backgroundIndex, {

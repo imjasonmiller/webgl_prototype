@@ -6,7 +6,7 @@ import media from "style-utils/media"
 
 import { ButtonAvatar, ButtonStats, ButtonTool, Modal } from "components"
 
-import { Compass } from "containers"
+import { Compass, ModalAvatar } from "containers"
 
 import { rotateCamera } from "actions/player"
 
@@ -103,13 +103,10 @@ class Overlay extends Component {
           <ButtonTool alt="Select construct" src={iconSelect} />
           <ButtonTool alt="Create construct" src={iconCreate} />
           <ButtonAvatar onClick={() => this.handleShowAvatar()} />
-          <Modal
+          <ModalAvatar
             isOpen={this.state.modalAvatar}
-            heading="Avatar"
             handleHide={() => this.handleHideAvatar()}
-          >
-            This is the avatar modal
-          </Modal>
+          />
           <ButtonTool alt="Lower terrain" src={iconLower} />
           <ButtonTool alt="Raise terrain" src={iconRaise} />
         </Controls>

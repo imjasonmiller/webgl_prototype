@@ -9,7 +9,13 @@ export const resizeWindow = (width, height, pixelRatio) => ({
   pixelRatio,
 })
 
-export const windowScroll = scrollHeight => ({
+export const updateModal = (scroll, height) => ({
+  type: "MODAL_UPDATE",
+  scroll,
+  height,
+})
+
+export const windowScroll = scroll => ({
   type: "WINDOW_SCROLL",
-  scrollHeight,
+  scroll,
 })

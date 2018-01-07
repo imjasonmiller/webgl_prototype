@@ -6,7 +6,9 @@ export { default as Time } from "./Time"
 // Avatar
 export { default as AvatarViewFace } from "./Avatar/AvatarViewFace"
 export { default as AvatarEditFace } from "./Avatar/AvatarEditFace"
+export { default as ColorPicker } from "./Avatar/ColorPicker"
 export { default as OptionPicker } from "./Avatar/OptionPicker"
+export { default as Pagination } from "./Avatar/Pagination"
 // Overlay
 export { default as Overlay } from "./Overlay/Overlay"
 export { default as Compass } from "./Overlay/Compass"

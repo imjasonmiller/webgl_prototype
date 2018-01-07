@@ -1,6 +1,6 @@
-export const changeLocale = locale => ({
-  type: "LOCALE_CHANGE",
-  locale,
+export const logout = () => ({
+  type: "LOGOUT_SUCCESS",
+  authenticated: false,
 })
 
 export const changeAvatarFaceColor = color => ({

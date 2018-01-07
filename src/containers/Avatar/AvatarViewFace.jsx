@@ -6,7 +6,7 @@ import Animated from "animated/lib/targets/react-dom"
 
 import FaceData from "static/avatar/face"
 
-import { changeAvatarFaceOption } from "actions/player"
+import { changeAvatarFaceColor, changeAvatarFaceOption } from "actions/player"
 import { incrementUID } from "actions/window"
 
 const Face = styled.svg`
@@ -65,18 +65,36 @@ class AvatarViewFace extends Component {
 
   constructor() {
     super()
+    this.colorAnimVal = new Animated.Value(0)
     this.optionAnimVal = new Animated.Value(0)
   }
 
   componentDidMount() {
-    // See clipFaceShow and clipFaceHide as to why this is necessary
+    // Multiple instances of the component are renderered at the same time. This means unique IDs are
+    // needed to prevent each <svg /> <mask /> from influencing the other component and disappearing
     this.props.dispatch(incrementUID())
 
     window.changeAvatar = option => {
-      this.props.dispatch(changeAvatarFaceOption(option))
+      this.props.dispatch(changeAvatarFaceColor(option))
     }
 
     this.mouthPath = this.mouth.getAttribute("d")
+    this.colorAnimListener = this.colorAnimVal.addListener(({ value }) => {
+      // The mask's scale needs to be (0, 0) when value is at 1.
+      // The x, y scale are inverted using scale - value * scale
+      // It will then move from (250, 275) to (0, 0)
+      this.clipFaceHide.setAttribute(
+        "transform",
+        `matrix(${value}, 0, 0, ${value}, ${250 - value * 250}, ${275 -
+          value * 275})`,
+      )
+      this.clipFaceShow.setAttribute(
+        "transform",
+        `matrix(${value}, 0, 0, ${value}, ${250 - value * 250}, ${275 -
+          value * 275})`,
+      )
+    })
+
     this.optionAnimListener = this.optionAnimVal.addListener(({ value }) => {
       this.mouth.setAttribute(
         "d",
@@ -123,6 +141,46 @@ class AvatarViewFace extends Component {
         bounciness: 10,
       }).start()
     }
+
+    if (this.props.color !== nextProps.color) {
+      /**
+       * Firefox seems to not accept a CSS scale transformation
+       * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1118710
+       * It does accept the following matrix transform attribute:
+       * matrix(sx, 0, 0, sy, cx - sx * cx, cy - sy * cy)
+       * sx and sy are for scale in the y- and x-axis and
+       * cx and cy are for the translation coordinates
+       * @see http://stackoverflow.com/a/6714140/1113913
+       */
+
+      // Scale both masks to 0 and translate to center (250, 275)
+      this.clipFaceHide.setAttribute(
+        "transform",
+        "matrix(0, 0, 0, 0, 250, 275)",
+      )
+      this.clipFaceShow.setAttribute(
+        "transform",
+        "matrix(0, 0, 0, 0, 250, 275)",
+      )
+
+      this.clipFacePrev.setAttribute("fill", FaceData.colors[this.props.color])
+      this.clipFaceNext.setAttribute("fill", FaceData.colors[nextProps.color])
+
+      // Value to 0 as we are starting a new animation
+      this.colorAnimVal.setValue(0)
+
+      Animated.spring(this.colorAnimVal, {
+        toValue: 1,
+        tension: 1,
+        friction: 10,
+      }).start()
+    }
+  }
+
+  shouldComponentUpdate() {
+    // Due to heavy DOM manipulation the component is
+    // updated manually via componentWillReceiveProps
+    return false
   }
 
   componentWillUnmount() {
@@ -132,8 +190,6 @@ class AvatarViewFace extends Component {
   render() {
     const { color, option, uid } = this.props
 
-    // Multiple instances of the component are renderered at the same time. This means unique IDs are
-    // needed to prevent each <svg /> <mask /> from influencing the other component and disappearing
     const clipFaceShow = `clip-face-show-${uid}`
     const clipFaceHide = `clip-face-hide-${uid}`
 
@@ -171,6 +227,20 @@ class AvatarViewFace extends Component {
             c0,15.9,12.9,28.8,28.8,28.8v44.3c0,66.3,53.7,120,120,120s120-53.7,120-120v-44.3c15.9,0,28.8-12.9,28.8-28.8
             C398.8,228.5,385.9,215.6,370,215.6z"
             fill={FaceData.colors[color]}
+            mask={`url(#${clipFaceHide})`}
+            ref={c => {
+              this.clipFacePrev = c
+            }}
+          />
+          <path
+            d="M370,215.6v-18.1c0-66.3-53.7-120-120-120s-120,53.7-120,120v18.1c-15.9,0-28.8,12.9-28.8,28.8
+            c0,15.9,12.9,28.8,28.8,28.8v44.3c0,66.3,53.7,120,120,120s120-53.7,120-120v-44.3c15.9,0,28.8-12.9,28.8-28.8
+            C398.8,228.5,385.9,215.6,370,215.6z"
+            fill={FaceData.colors[color]}
+            mask={`url(#${clipFaceShow})`}
+            ref={c => {
+              this.clipFaceNext = c
+            }}
           />
         </g>
         <circle fill="#fff" cx="187.4" cy="240.2" r="25" />

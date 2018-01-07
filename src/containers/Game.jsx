@@ -7,7 +7,7 @@ import { Loader, Overlay, Renderer, Time } from "containers"
 
 import { Spinner } from "components"
 
-import { modifyTerrain } from "actions/player"
+import { logout, modifyTerrain } from "actions/player"
 
 const WrapOverflow = styled.div`
   position: absolute;
@@ -61,6 +61,7 @@ class Game extends Component {
         this.setState({ loaded: true })
       })
       .catch(() => {
+        this.props.dispatch(logout())
         this.props.history.push("/")
       })
   }

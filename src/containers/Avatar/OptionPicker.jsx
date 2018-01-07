@@ -7,6 +7,7 @@ const OptionWrap = styled.div`
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1em;
   grid-auto-rows: min-content;
+  margin: 0 0 1em 0;
 `
 
 const OptionPicker = props => <OptionWrap>{props.children}</OptionWrap>

@@ -26,7 +26,7 @@ const theme = {
   orange: "rgb(251, 163, 10)",
   white: "rgb(255, 255, 255)",
   whitesmoke: "rgb(248, 248, 248)",
-  gainsboro: "rgb(225, 225, 225)",
+  mercury: "rgb(225, 225, 225)",
   silver: "rgb(187, 187, 187)",
   mineshaft: "rgb(51, 51, 51)",
   royalblue: "rgb(61, 136, 232)",

@@ -20,12 +20,11 @@ const Button = styled.a`
   border-radius: 3px;
   cursor: ${props => (props.active ? "pointer" : "auto")};
   font-weight: 600;
-  color: ${props =>
-    props.active ? props.theme.orange : props.theme.gainsboro};
+  color: ${props => (props.active ? props.theme.orange : props.theme.mercury)};
 
   &:hover {
     color: ${props =>
-      props.active ? props.theme.orange : props.theme.gainsboro};
+      props.active ? props.theme.orange : props.theme.mercury};
   }
 `
 const ButtonPrev = Button.extend`
@@ -42,8 +41,7 @@ const ButtonNext = Button.extend`
 
 const ButtonIcon = styled.svg`
   width: 1.25em;
-  stroke: ${props =>
-    props.active ? props.theme.orange : props.theme.gainsboro};
+  stroke: ${props => (props.active ? props.theme.orange : props.theme.mercury)};
   stroke-width: 4;
   stroke-linecap: round;
   stroke-linejoin: round;

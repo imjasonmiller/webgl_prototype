@@ -24,6 +24,7 @@
     }
   },
   "globals": {
+    "CLIENT": false,
     "APP_HOST": false,
     "APP_PORT": false,
     "APP_HTTPS": false,

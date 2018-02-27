@@ -9,6 +9,8 @@ import FaceData from "static/avatar/face"
 import { changeAvatarFaceColor, changeAvatarFaceOption } from "actions/player"
 import { incrementUID } from "actions/window"
 
+import interpolatePath from "./InterpolatePath"
+
 const Face = styled.svg`
   display: block;
   position: absolute;
@@ -30,41 +32,9 @@ const EyebrowLeft = Mouth.extend``
 const EyebrowRight = Mouth.extend``
 
 class AvatarViewFace extends Component {
-  /**
-   * Interpolate between source and target path data
-   * Shorthand notation does not yet work. Delimit all
-   * values with a comma — e.g. "32.5,-7", not "32.5-7"
-   * @param {Number} value  Source to target interpolation, ranges from 0–1
-   * @param {String} source Source path data
-   * @param {String} target Target path data
-   */
-  static interpolatePath(value, source, target) {
-    // RegEx for number (positions) and non-number (commands) path data
-    const NaNExp = /[^\de\-.]/g
-    const NumExp = /(-)?(\d|e|\.)+/g
-
-    const commands = source.match(NaNExp)
-    const sourcePos = source.match(NumExp)
-    const targetPos = target.match(NumExp)
-
-    const tween = []
-
-    for (let i = 0; i < sourcePos.length; i += 1) {
-      const command = commands[i]
-
-      // prettier-ignore
-      const position = parseFloat(sourcePos[i]) + (
-        parseFloat(targetPos[i]) - parseFloat(sourcePos[i])
-      ) * value
-
-      tween.push(command + position.toFixed(3))
-    }
-
-    return tween.join("")
-  }
-
   constructor() {
     super()
+
     this.colorAnimVal = new Animated.Value(0)
     this.optionAnimVal = new Animated.Value(0)
   }
@@ -74,13 +44,11 @@ class AvatarViewFace extends Component {
     // needed to prevent each <svg /> <mask /> from influencing the other component and disappearing
     this.props.dispatch(incrementUID())
 
-    window.changeAvatar = option => {
-      this.props.dispatch(changeAvatarFaceColor(option))
-    }
-
+    // Get initial mouth path data
     this.mouthPath = this.mouth.getAttribute("d")
+
     this.colorAnimListener = this.colorAnimVal.addListener(({ value }) => {
-      // The mask's scale needs to be (0, 0) when value is at 1.
+      // The mask's scale needs to be (0, 0) when the value is at 1.
       // The x, y scale are inverted using scale - value * scale
       // It will then move from (250, 275) to (0, 0)
       this.clipFaceHide.setAttribute(
@@ -98,7 +66,7 @@ class AvatarViewFace extends Component {
     this.optionAnimListener = this.optionAnimVal.addListener(({ value }) => {
       this.mouth.setAttribute(
         "d",
-        this.constructor.interpolatePath(
+        interpolatePath(
           value,
           this.mouthPath,
           FaceData.options[this.props.option].mouth,
@@ -107,7 +75,7 @@ class AvatarViewFace extends Component {
 
       this.eyebrowLeft.setAttribute(
         "d",
-        this.constructor.interpolatePath(
+        interpolatePath(
           value,
           this.eyebrowLeftPath,
           FaceData.options[this.props.option].eyebrowLeft,
@@ -116,7 +84,7 @@ class AvatarViewFace extends Component {
 
       this.eyebrowRight.setAttribute(
         "d",
-        this.constructor.interpolatePath(
+        interpolatePath(
           value,
           this.eyebrowRightPath,
           FaceData.options[this.props.option].eyebrowRight,

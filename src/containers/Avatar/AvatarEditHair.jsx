@@ -2,29 +2,29 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { ColorPicker, OptionPicker, Pagination } from "containers"
-import { changeAvatarFaceColor, changeAvatarFaceOption } from "actions/player"
+import { changeAvatarHairColor, changeAvatarHairOption } from "actions/player"
 
 import Option from "components/Avatar/Option"
 
-import FaceData from "static/avatar/face"
+import HairData from "static/avatar/hair"
 
 import AvatarEdit from "./AvatarEdit"
 
-class AvatarEditFace extends Component {
+class AvatarEditHair extends Component {
   handleColor(color) {
-    this.props.dispatch(changeAvatarFaceColor(color))
+    this.props.dispatch(changeAvatarHairColor(color))
   }
 
   handleOption(option) {
-    this.props.dispatch(changeAvatarFaceOption(option))
+    this.props.dispatch(changeAvatarHairOption(option))
   }
 
   render() {
     const {
       colorsPageIndex,
       colorsPageLength,
-      faceColor,
-      faceOption,
+      hairColor,
+      hairOption,
       optionsPageIndex,
       optionsPageLength,
     } = this.props
@@ -32,9 +32,9 @@ class AvatarEditFace extends Component {
     const start = optionsPageIndex * optionsPageLength
     const end = start + optionsPageLength
 
-    const Options = FaceData.options.slice(start, end).map((option, index) => (
+    const Options = HairData.options.slice(start, end).map((option, index) => (
       <Option
-        active={faceOption === start + index}
+        active={hairOption === start + index}
         key={option.key}
         handleClick={() =>
           this.handleOption(index + optionsPageIndex * optionsPageLength)
@@ -52,12 +52,15 @@ class AvatarEditFace extends Component {
             v-44.3c15.9,0,28.8-12.9,28.8-28.8
             C398.8,228.5,385.9,215.6,370,215.6z"
         />
-        <path d={option.nose} />
-        <path d={option.mouth} />
-        <path d={option.eyebrowLeft} />
-        <path d={option.eyebrowRight} />
+        <path d="M232,296.5c10,9.9,26,9.9,36-0.1" />
+        <path d="M213.8,341L213.8,341c20,20,52.4,20,72.4,0" />
+        <path d="M212.4,204.5c-13.8-13.8-36.1-13.8-49.9,0" />
+        <path d="M287.6,204.5c13.8-13.8,36.1-13.8,49.9,0" />
         <circle cx="187.4" cy="248.2" r="15" />
         <circle cx="312.4" cy="248.2" r="15" />
+        {HairData.options[index + optionsPageIndex * optionsPageLength].data(
+          "rgb(187, 187, 187)",
+        )}
       </Option>
     ))
 
@@ -69,13 +72,13 @@ class AvatarEditFace extends Component {
           handleNext={this.props.handleNextOptions}
           listIndex={optionsPageIndex}
           listLength={optionsPageLength}
-          totalLength={FaceData.options.length}
+          totalLength={HairData.options.length}
         />
         <ColorPicker
-          activeColor={faceColor}
+          activeColor={hairColor}
           colorsPageIndex={this.props.colorsPageIndex}
           colorsPageLength={this.props.colorsPageLength}
-          data={FaceData.colors}
+          data={HairData.colors}
           handleColor={color => this.handleColor(color)}
         />
         <Pagination
@@ -83,14 +86,14 @@ class AvatarEditFace extends Component {
           handleNext={this.props.handleNextColors}
           listIndex={colorsPageIndex}
           listLength={colorsPageLength}
-          totalLength={FaceData.colors.length}
+          totalLength={HairData.colors.length}
         />
       </div>
     )
   }
 }
 
-AvatarEditFace.propTypes = {
+AvatarEditHair.propTypes = {
   dispatch: PropTypes.func.isRequired,
   colorsPageIndex: PropTypes.number.isRequired,
   colorsPageLength: PropTypes.number.isRequired,
@@ -98,15 +101,15 @@ AvatarEditFace.propTypes = {
   handleNextColors: PropTypes.func.isRequired,
   handlePrevOptions: PropTypes.func.isRequired,
   handleNextOptions: PropTypes.func.isRequired,
-  faceColor: PropTypes.number.isRequired,
-  faceOption: PropTypes.number.isRequired,
+  hairColor: PropTypes.number.isRequired,
+  hairOption: PropTypes.number.isRequired,
   optionsPageIndex: PropTypes.number.isRequired,
   optionsPageLength: PropTypes.number.isRequired,
 }
 
 const mapStateToProps = state => ({
-  faceColor: state.player.faceColor,
-  faceOption: state.player.faceOption,
+  hairColor: state.player.hairColor,
+  hairOption: state.player.hairOption,
 })
 
-export default AvatarEdit(connect(mapStateToProps)(AvatarEditFace), FaceData)
+export default AvatarEdit(connect(mapStateToProps)(AvatarEditHair), HairData)

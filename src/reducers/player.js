@@ -5,6 +5,12 @@ const initialState = {
   cameraRotation: 0,
   faceColor: 0,
   faceOption: 0,
+  hairColor: 0,
+  hairOption: 0,
+  itemColor: 0,
+  itemOption: 0,
+  wearColor: 0,
+  wearOption: 0,
 }
 
 const player = (state = initialState, action) => {
@@ -39,15 +45,45 @@ const player = (state = initialState, action) => {
         ...state,
         serverTime: action.time,
       }
+    case "CHANGE_AVATAR_FACE_COLOR":
+      return {
+        ...state,
+        faceColor: action.color,
+      }
     case "CHANGE_AVATAR_FACE_OPTION":
       return {
         ...state,
         faceOption: action.option,
       }
-    case "CHANGE_AVATAR_FACE_COLOR":
+    case "CHANGE_AVATAR_HAIR_COLOR":
       return {
         ...state,
-        faceColor: action.color,
+        hairColor: action.color,
+      }
+    case "CHANGE_AVATAR_HAIR_OPTION":
+      return {
+        ...state,
+        hairOption: action.option,
+      }
+    case "CHANGE_AVATAR_ITEM_COLOR":
+      return {
+        ...state,
+        itemColor: action.color,
+      }
+    case "CHANGE_AVATAR_ITEM_OPTION":
+      return {
+        ...state,
+        itemOption: action.option,
+      }
+    case "CHANGE_AVATAR_WEAR_COLOR":
+      return {
+        ...state,
+        wearColor: action.color,
+      }
+    case "CHANGE_AVATAR_WEAR_OPTION":
+      return {
+        ...state,
+        wearOption: action.option,
       }
     default:
       return state

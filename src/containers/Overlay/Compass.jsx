@@ -107,7 +107,6 @@ const ArrowPin = styled.circle`
   stroke-width: 5;
   stroke: ${props => props.theme.orange};
 `
-
 const Compass = ({ cameraRotation, handleCameraRotation }) => {
   const baseRotation = {
     transform: [
@@ -131,11 +130,13 @@ const Compass = ({ cameraRotation, handleCameraRotation }) => {
     ],
   }
 
-  Animated.spring(compassRotation, {
-    toValue: cameraRotation,
-    tension: 150,
-    friction: 100,
-  }).start()
+  if (CLIENT) {
+    Animated.spring(compassRotation, {
+      toValue: cameraRotation,
+      tension: 150,
+      friction: 100,
+    }).start()
+  }
 
   return (
     <Wrap onClick={handleCameraRotation}>

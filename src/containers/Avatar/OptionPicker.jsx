@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import styled from "styled-components"
 
-const OptionWrap = styled.div`
+const Wrap = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1em;
@@ -10,7 +10,7 @@ const OptionWrap = styled.div`
   margin: 0 0 1em 0;
 `
 
-const OptionPicker = props => <OptionWrap>{props.children}</OptionWrap>
+const OptionPicker = props => <Wrap>{props.children}</Wrap>
 
 OptionPicker.propTypes = {
   children: PropTypes.node.isRequired,

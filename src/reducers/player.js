@@ -1,5 +1,7 @@
 const initialState = {
   authenticated: false,
+  loadComplete: false,
+  loadProgress: 0,
   terrain: Array(841).fill(0),
   serverTime: Date.now(),
   cameraRotation: 0,
@@ -24,6 +26,16 @@ const player = (state = initialState, action) => {
       return {
         ...state,
         authenticated: false,
+      }
+    case "LOAD_COMPLETE":
+      return {
+        ...state,
+        loadComplete: true,
+      }
+    case "LOAD_PROGRESS":
+      return {
+        ...state,
+        loadProgress: action.progress,
       }
     case "CHANGE_LOCALE":
       return {

@@ -51,3 +51,12 @@ export const modifyTerrain = terrain => ({
 export const rotateCamera = () => ({
   type: "CAMERA_ROTATION",
 })
+
+export const loadComplete = () => ({
+  type: "LOAD_COMPLETE",
+})
+
+export const loadProgress = progress => ({
+  type: "LOAD_PROGRESS",
+  progress,
+})

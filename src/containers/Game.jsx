@@ -4,10 +4,15 @@ import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
 import styled, { withTheme } from "styled-components"
 import { Loader, Overlay, Renderer, Time } from "containers"
-
 import { Spinner } from "components"
+import { injectIntl } from "react-intl"
 
-import { logout, modifyTerrain } from "actions/player"
+import {
+  logout,
+  modifyTerrain,
+  loadProgress,
+  loadComplete,
+} from "actions/player"
 
 const WrapOverflow = styled.div`
   position: absolute;
@@ -19,17 +24,11 @@ const WrapOverflow = styled.div`
 `
 
 class Game extends Component {
-  constructor() {
-    super()
-    this.state = {
-      loaded: false,
-      progress: 0,
-    }
-  }
-
   componentDidMount() {
-    Loader.load(progress => this.setState({ progress })).then(() =>
-      this.loadPlayer(),
+    console.log("<Game /> componentDidMount()\nProps:", this.props)
+
+    Loader.load(progress => this.props.dispatch(loadProgress(progress))).then(
+      () => this.loadPlayer(),
     )
     // .catch((err) => console.log(err))
   }
@@ -58,7 +57,8 @@ class Game extends Component {
         // const fetchTime = (performance || Date).now() - fetchStart
         // Time.setTime(data.time + fetchTime)
         this.props.dispatch(modifyTerrain(data.terrain))
-        this.setState({ loaded: true })
+        this.props.dispatch(loadComplete())
+        // this.setState({ loaded: true })
       })
       .catch(() => {
         this.props.dispatch(logout())
@@ -70,11 +70,11 @@ class Game extends Component {
     return (
       <div>
         <WrapOverflow>
-          {this.state.loaded ? (
+          {this.props.loadComplete ? (
             <Renderer />
           ) : (
             <div>
-              {this.state.progress}
+              {this.props.loadProgress}
               <Spinner size={50} speed={2} color={this.props.theme.orange} />
             </div>
           )}
@@ -93,6 +93,13 @@ Game.propTypes = {
   theme: PropTypes.shape({
     orange: PropTypes.string.isRequired,
   }).isRequired,
+  loadComplete: PropTypes.bool.isRequired,
+  loadProgress: PropTypes.number.isRequired,
 }
 
-export default withRouter(connect()(withTheme(Game)))
+const mapStateToProps = state => ({
+  loadComplete: state.player.loadComplete,
+  loadProgress: state.player.loadProgress,
+})
+
+export default withRouter(injectIntl(connect(mapStateToProps)(withTheme(Game))))

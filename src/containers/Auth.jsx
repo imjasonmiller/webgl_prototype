@@ -20,7 +20,7 @@ const Logo = styled.img`
 `
 const logoFile = require("static/images/logo_placeholder.svg")
 
-const Login = styled.div`
+const Login = styled.form`
   width: 370px;
   max-width: 100%;
   margin: auto;
@@ -85,6 +85,7 @@ class Auth extends Component {
             defaultMessage="Your world is one click away. Enter your details and explore!"
           />
           <Username
+            autoComplete="username"
             placeholder="Username"
             onChange={e => {
               this.setState({ inputUsername: e.target.value })
@@ -92,6 +93,7 @@ class Auth extends Component {
             type="text"
           />
           <Password
+            autoComplete="current-password"
             placeholder="Password"
             onChange={e => {
               this.setState({ inputPassword: e.target.value })

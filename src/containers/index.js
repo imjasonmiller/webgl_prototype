@@ -20,8 +20,9 @@ export { default as Pagination } from "./Avatar/Pagination"
 export { default as Overlay } from "./Overlay/Overlay"
 export { default as Compass } from "./Overlay/Compass"
 
-// Avatar Modal
+// Modals
 export { default as ModalAvatar } from "./Overlay/ModalAvatar"
+export { default as ModalConfig } from "./Overlay/ModalConfig"
 
 // Renderer
 export { default as Renderer } from "./Renderer/Renderer"

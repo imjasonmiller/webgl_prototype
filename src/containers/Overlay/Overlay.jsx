@@ -1,12 +1,13 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
+import { injectIntl } from "react-intl"
 import styled from "styled-components"
 import media from "style-utils/media"
 
-import { ButtonAvatar, ButtonStats, ButtonTool, Modal } from "components"
+import { ButtonAvatar, ButtonStats, ButtonTool } from "components"
 
-import { Compass, ModalAvatar } from "containers"
+import { Compass, ModalAvatar, ModalConfig } from "containers"
 
 import { rotateCamera } from "actions/player"
 
@@ -82,13 +83,10 @@ class Overlay extends Component {
             src={iconConfig}
             onClick={() => this.handleShowConfig()}
           />
-          <Modal
+          <ModalConfig
             isOpen={this.state.modalConfig}
-            heading="Configuration"
             handleHide={() => this.handleHideConfig()}
-          >
-            This is the settings modal
-          </Modal>
+          />
           <ButtonStats
             alt="Logout"
             src={iconLogout}
@@ -125,4 +123,4 @@ const mapStateToProps = state => ({
   cameraRotation: state.player.cameraRotation,
 })
 
-export default connect(mapStateToProps)(Overlay)
+export default injectIntl(connect(mapStateToProps)(Overlay))

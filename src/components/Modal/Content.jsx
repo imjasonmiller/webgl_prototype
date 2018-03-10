@@ -8,13 +8,27 @@ import debounce from "lodash/debounce"
 import { updateModal } from "actions/window"
 
 const StyledContent = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
   padding: 0 1em;
   height: 100%;
   overflow-y: scroll;
   -webkit-overflow-scroling: touch;
   color: ${props => props.theme.mineshaft};
+
+  &::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: ${props => props.theme.whitesmoke};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${props => props.theme.orange};
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${props => props.theme.orange};
+  }
 `
 
 class Content extends Component {

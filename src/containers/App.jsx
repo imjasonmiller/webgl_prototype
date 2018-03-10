@@ -4,6 +4,7 @@ import { Route, Redirect, withRouter } from "react-router-dom"
 import styled, { injectGlobal, ThemeProvider } from "styled-components"
 import { connect } from "react-redux"
 import { IntlProvider, addLocaleData } from "react-intl"
+import { hot } from "react-hot-loader"
 import debounce from "lodash/debounce"
 
 import { resizeWindow } from "actions/window"
@@ -139,6 +140,8 @@ class App extends Component {
   }
 
   render() {
+    console.log("<App /> rerender\nthis.props.locale:", this.props.locale)
+
     return (
       <IntlProvider
         locale={this.props.locale}
@@ -149,7 +152,7 @@ class App extends Component {
             <Route
               exact
               path="/"
-              component={() =>
+              render={() =>
                 this.props.authenticated ? (
                   <Redirect to="/game" />
                 ) : (
@@ -159,13 +162,13 @@ class App extends Component {
             />
             <Route
               path="/auth"
-              component={() =>
+              render={() =>
                 this.props.authenticated ? <Redirect to="/" /> : <Auth />
               }
             />
             <Route
               path="/game"
-              component={() =>
+              render={() =>
                 this.props.authenticated ? <Game /> : <Redirect to="/auth" />
               }
             />
@@ -187,4 +190,4 @@ const mapStateToProps = state => ({
   locale: state.config.locale,
 })
 
-export default withRouter(connect(mapStateToProps)(App))
+export default withRouter(hot(module)(connect(mapStateToProps)(App)))

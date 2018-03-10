@@ -29,24 +29,32 @@ const Sticky = styled.div`
     `translateY(calc(${props.modalScroll + props.modalHeight / 2}px - 50%))`};
   transition: transform 0.5s ease;
 `
+
+const Columns = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+`
+
 const ModalAvatar = ({ handleHide, isOpen, modalHeight, modalScroll }) => (
   <Modal isOpen={isOpen} heading="Avatar" handleHide={handleHide}>
-    <Sticky modalHeight={modalHeight} modalScroll={modalScroll}>
-      <AvatarViewFace />
-      <AvatarViewHair />
-      <AvatarViewItem />
-      <AvatarViewWear />
-    </Sticky>
-    <div>
-      <h2>Face</h2>
-      <AvatarEditFace />
-      <h2>Hair</h2>
-      <AvatarEditHair />
-      <h2>Item</h2>
-      <AvatarEditItem />
-      <h2>Wear</h2>
-      <AvatarEditWear />
-    </div>
+    <Columns>
+      <Sticky modalHeight={modalHeight} modalScroll={modalScroll}>
+        <AvatarViewFace />
+        <AvatarViewHair />
+        <AvatarViewItem />
+        <AvatarViewWear />
+      </Sticky>
+      <div>
+        <h2>Face</h2>
+        <AvatarEditFace />
+        <h2>Hair</h2>
+        <AvatarEditHair />
+        <h2>Item</h2>
+        <AvatarEditItem />
+        <h2>Wear</h2>
+        <AvatarEditWear />
+      </div>
+    </Columns>
   </Modal>
 )
 

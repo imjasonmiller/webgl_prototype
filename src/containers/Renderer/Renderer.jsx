@@ -131,9 +131,10 @@ class Renderer extends Component {
             vertices={this.props.terrainVerts}
           />
 
-          <Skybox time={Time.getTime()} />
+          {/* <Skybox time={Time.getTime()} /> */}
+          <Skybox time={{ delta: 50000, min: 56, sec: 32 }} />
 
-          <group
+          {/* <group
             rotation={
               new THREE.Euler(
                 // Altitude, highest angle being 30 degrees
@@ -143,19 +144,44 @@ class Renderer extends Component {
                 0,
               )
             }
+          > */}
+          <group
+            rotation={
+              new THREE.Euler(
+                // Altitude, highest angle being 30 degrees
+                Math.PI / 6,
+                // Rotational speed, every 15000 ms = 1 rotation
+                Math.PI * 2,
+                0,
+              )
+            }
           >
-            <CelestialBody
+            {/* <CelestialBody
               name="sun"
               color={new THREE.Color(0xe68c21)}
               position={new THREE.Vector3(0, 0, 750)}
               time={this.state.timeNow}
+            /> */}
+
+            <CelestialBody
+              name="sun"
+              color={new THREE.Color(0xe68c21)}
+              position={new THREE.Vector3(0, 0, 750)}
+              time={50000}
             />
+
+            {/* <CelestialBody
+              name="moon"
+              color={new THREE.Color(0xbfbfbf)}
+              position={new THREE.Vector3(0, 0, -750)}
+              time={this.state.timeNow}
+            /> */}
 
             <CelestialBody
               name="moon"
               color={new THREE.Color(0xbfbfbf)}
               position={new THREE.Vector3(0, 0, -750)}
-              time={this.state.timeNow}
+              time={50000}
             />
           </group>
         </scene>

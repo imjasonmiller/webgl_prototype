@@ -9,6 +9,7 @@ const CompressionPlugin = require("compression-webpack-plugin")
 
 const client = {
   name: "client",
+  mode: "development",
   target: "web",
   context: path.resolve(__dirname, ".."),
   entry: "./src/client.entry.jsx",
@@ -115,7 +116,6 @@ const client = {
     new webpack.ProvidePlugin({
       THREE: "three",
     }),
-    new Uglify(),
     new CompressionPlugin({
       asset: "[path].gz[query]",
       algorithm: "gzip",
@@ -129,6 +129,7 @@ const client = {
 
 const server = {
   name: "server",
+  mode: "development",
   target: "node",
   context: path.resolve(__dirname, ".."),
   entry: "./src/server.entry.jsx",

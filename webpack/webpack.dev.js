@@ -3,12 +3,10 @@ const webpack = require("webpack")
 
 const client = {
   name: "client",
+  mode: "development",
+  target: "web",
   context: path.resolve(__dirname, ".."),
-  entry: [
-    "webpack-hot-middleware/client?name=client",
-    "react-hot-loader/patch",
-    "./src/client.entry.jsx",
-  ],
+  entry: ["./src/client.entry.jsx"],
   output: {
     path: path.resolve(__dirname, "..", "build"),
     filename: "client.js",
@@ -98,8 +96,6 @@ const client = {
     modules: ["node_modules", path.resolve(__dirname, "..", "src")],
   },
   plugins: [
-    new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.ProvidePlugin({
       THREE: "three",
     }),
@@ -114,10 +110,11 @@ const client = {
 }
 
 const server = {
+  mode: "development",
   name: "server",
   target: "node",
   context: path.resolve(__dirname, ".."),
-  entry: "./src/server.entry.jsx",
+  entry: ["./src/server.entry.jsx"],
   output: {
     path: path.resolve(__dirname, "..", "build"),
     filename: "server.js",

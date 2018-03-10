@@ -59,6 +59,9 @@ if (DEV === "true") {
       serverSideRender: true,
       stats: { colors: true },
     },
+    hot: {
+      https: false,
+    },
   })
 
   const hotServer = hotServerMiddleware(compiler, {

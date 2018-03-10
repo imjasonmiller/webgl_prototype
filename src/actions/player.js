@@ -52,6 +52,11 @@ export const rotateCamera = () => ({
   type: "CAMERA_ROTATION",
 })
 
+export const changeTool = tool => ({
+  type: "TOOL_CHANGE",
+  tool,
+})
+
 export const loadComplete = () => ({
   type: "LOAD_COMPLETE",
 })

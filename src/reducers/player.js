@@ -13,6 +13,7 @@ const initialState = {
   itemOption: 0,
   wearColor: 0,
   wearOption: 0,
+  tool: "SELECT",
 }
 
 const player = (state = initialState, action) => {
@@ -36,6 +37,11 @@ const player = (state = initialState, action) => {
       return {
         ...state,
         loadProgress: action.progress,
+      }
+    case "TOOL_CHANGE":
+      return {
+        ...state,
+        tool: action.tool,
       }
     case "CHANGE_LOCALE":
       return {

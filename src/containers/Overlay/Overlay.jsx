@@ -9,7 +9,7 @@ import { ButtonAvatar, ButtonStats, ButtonTool } from "components"
 
 import { Compass, ModalAvatar, ModalConfig } from "containers"
 
-import { rotateCamera } from "actions/player"
+import { changeTool, rotateCamera } from "actions/player"
 
 const iconConfig = require("static/images/icon_config.svg")
 const iconLogout = require("static/images/icon_logout.svg")
@@ -75,6 +75,8 @@ class Overlay extends Component {
   }
 
   render() {
+    const { dispatch, tool } = this.props
+
     return (
       <div>
         <Stats>
@@ -82,10 +84,6 @@ class Overlay extends Component {
             alt="Config"
             src={iconConfig}
             onClick={() => this.handleShowConfig()}
-          />
-          <ModalConfig
-            isOpen={this.state.modalConfig}
-            handleHide={() => this.handleHideConfig()}
           />
           <ButtonStats
             alt="Logout"
@@ -98,16 +96,44 @@ class Overlay extends Component {
           handleCameraRotation={() => this.handleCameraRotation()}
         />
         <Controls>
-          <ButtonTool alt="Select construct" src={iconSelect} />
-          <ButtonTool alt="Create construct" src={iconCreate} />
-          <ButtonAvatar onClick={() => this.handleShowAvatar()} />
-          <ModalAvatar
-            isOpen={this.state.modalAvatar}
-            handleHide={() => this.handleHideAvatar()}
+          <ButtonTool
+            active={tool === "SELECT"}
+            alt="Select construct"
+            src={iconSelect}
+            onMouseDown={() => dispatch(changeTool("SELECT"))}
+            onTouchStart={() => dispatch(changeTool("SELECT"))}
           />
-          <ButtonTool alt="Lower terrain" src={iconLower} />
-          <ButtonTool alt="Raise terrain" src={iconRaise} />
+          <ButtonTool
+            active={tool === "CREATE"}
+            alt="Create construct"
+            src={iconCreate}
+            onMouseDown={() => dispatch(changeTool("CREATE"))}
+            onTouchStart={() => dispatch(changeTool("CREATE"))}
+          />
+          <ButtonAvatar onClick={() => this.handleShowAvatar()} />
+          <ButtonTool
+            active={tool === "LOWER"}
+            alt="Lower terrain"
+            src={iconLower}
+            onMouseDown={() => dispatch(changeTool("LOWER"))}
+            onTouchStart={() => dispatch(changeTool("LOWER"))}
+          />
+          <ButtonTool
+            active={tool === "RAISE"}
+            alt="Raise terrain"
+            src={iconRaise}
+            onMouseDown={() => dispatch(changeTool("RAISE"))}
+            onTouchStart={() => dispatch(changeTool("RAISE"))}
+          />
         </Controls>
+        <ModalConfig
+          isOpen={this.state.modalConfig}
+          handleHide={() => this.handleHideConfig()}
+        />
+        <ModalAvatar
+          isOpen={this.state.modalAvatar}
+          handleHide={() => this.handleHideAvatar()}
+        />
       </div>
     )
   }
@@ -116,11 +142,13 @@ class Overlay extends Component {
 Overlay.propTypes = {
   cameraRotation: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
+  tool: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = state => ({
   serverTime: state.player.serverTime,
   cameraRotation: state.player.cameraRotation,
+  tool: state.player.tool,
 })
 
 export default injectIntl(connect(mapStateToProps)(Overlay))

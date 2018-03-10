@@ -192,8 +192,6 @@ class ModalConfig extends Component {
     const { isOpen, handleHide } = this.props
     const { formatMessage } = this.props.intl
 
-    console.log(this.props)
-
     return (
       <Modal
         isOpen={isOpen}

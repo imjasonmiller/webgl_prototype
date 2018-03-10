@@ -140,8 +140,6 @@ class App extends Component {
   }
 
   render() {
-    console.log("<App /> rerender\nthis.props.locale:", this.props.locale)
-
     return (
       <IntlProvider
         locale={this.props.locale}

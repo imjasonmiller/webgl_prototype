@@ -12,7 +12,11 @@ class Skybox extends Component {
 
   render() {
     return (
-      <mesh>
+      <mesh
+        ref={c => {
+          this.obj = c
+        }}
+      >
         <boxGeometry
           width={this.props.size}
           height={this.props.size}

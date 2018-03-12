@@ -92,6 +92,9 @@ class Terrain extends Component {
     // Current mouse position
     this.mouse = new THREE.Vector2()
 
+    // Delta between the previous and current intersection
+    this.terrainIntersectDelta = 0
+
     this.handleDown = this.handleDown.bind(this)
     this.handleUp = this.handleUp.bind(this)
     this.handleMove = this.handleMove.bind(this)
@@ -261,7 +264,7 @@ class Terrain extends Component {
     const terrainMatSide = new THREE.MeshPhongMaterial({
       color: 0x528316,
       emissive: 0x384410,
-      shading: THREE.FlatShading,
+      flatShading: true,
       polygonOffset: true,
       polygonOffsetFactor: -100.0,
     })
@@ -385,6 +388,19 @@ class Terrain extends Component {
           } else {
             this.shape(origin, 50, coords)
           }
+
+          // Update terrain shader with the current intersection point
+          this.terrain.material[0].uniforms.intersect.value = new THREE.Vector3(
+            this.state.currTerrainIntersect.x,
+            this.state.currTerrainIntersect.y,
+            this.state.currTerrainIntersect.z,
+          )
+
+          // Enable terrain deformation ring
+          this.terrain.material[0].uniforms.terrainTool.value = true
+        } else {
+          // Disable terrain deformation ring
+          this.terrain.material[0].uniforms.terrainTool.value = false
         }
       }
     }

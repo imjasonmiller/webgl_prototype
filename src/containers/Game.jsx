@@ -23,6 +23,22 @@ const WrapOverflow = styled.div`
   overflow: hidden;
 `
 
+const LoadWrap = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: 50%;
+  height: 0;
+  padding-bottom: 25%;
+`
+
+const LoadText = styled.h2`
+  text-align: center;
+`
+
 class Game extends Component {
   componentDidMount() {
     Loader.load(progress => this.props.dispatch(loadProgress(progress))).then(
@@ -56,7 +72,6 @@ class Game extends Component {
         // Time.setTime(data.time + fetchTime)
         this.props.dispatch(modifyTerrain(data.terrain))
         this.props.dispatch(loadComplete())
-        // this.setState({ loaded: true })
       })
       .catch(() => {
         this.props.dispatch(logout())
@@ -71,10 +86,10 @@ class Game extends Component {
           {this.props.loadComplete ? (
             <Renderer />
           ) : (
-            <div>
-              {this.props.loadProgress}
+            <LoadWrap>
               <Spinner size={50} speed={2} color={this.props.theme.orange} />
-            </div>
+              <LoadText>{`${this.props.loadProgress.toFixed(1)}%`}</LoadText>
+            </LoadWrap>
           )}
           <Overlay />
         </WrapOverflow>

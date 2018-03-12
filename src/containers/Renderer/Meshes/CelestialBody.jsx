@@ -38,7 +38,12 @@ class CelestialBody extends Component {
 
   render() {
     return (
-      <mesh position={this.props.position}>
+      <mesh
+        position={this.props.position}
+        ref={c => {
+          this.obj = c
+        }}
+      >
         <bufferGeometry
           index={null}
           ref={c => {

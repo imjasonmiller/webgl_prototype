@@ -33,12 +33,36 @@ class Loader {
         src: require("static/shaders/skybox_frag.glsl"),
       },
       {
+        name: "starfield_vert",
+        src: require("static/shaders/starfield_vert.glsl"),
+      },
+      {
+        name: "starfield_frag",
+        src: require("static/shaders/starfield_frag.glsl"),
+      },
+      {
         name: "terrain_vert",
         src: require("static/shaders/terrain_vert.glsl"),
       },
       {
         name: "terrain_frag",
         src: require("static/shaders/terrain_frag.glsl"),
+      },
+      {
+        name: "water_base_vert",
+        src: require("static/shaders/water_base_vert.glsl"),
+      },
+      {
+        name: "water_base_frag",
+        src: require("static/shaders/water_base_frag.glsl"),
+      },
+      {
+        name: "water_side_vert",
+        src: require("static/shaders/water_side_vert.glsl"),
+      },
+      {
+        name: "water_side_frag",
+        src: require("static/shaders/water_side_frag.glsl"),
       },
     ]
   }

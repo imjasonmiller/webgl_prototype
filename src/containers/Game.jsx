@@ -25,8 +25,6 @@ const WrapOverflow = styled.div`
 
 class Game extends Component {
   componentDidMount() {
-    console.log("<Game /> componentDidMount()\nProps:", this.props)
-
     Loader.load(progress => this.props.dispatch(loadProgress(progress))).then(
       () => this.loadPlayer(),
     )

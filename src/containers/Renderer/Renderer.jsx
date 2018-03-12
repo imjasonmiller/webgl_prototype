@@ -32,9 +32,15 @@ class Renderer extends Component {
       .addListener(({ value }) => {
         this.cameraPivot.rotation.y = value
       })
+
+    this.getCamera = this.getCamera.bind(this)
   }
 
   componentDidMount() {
+    // Point spotlight targets to scene origin
+    this.scene.add(this.sunLight.target)
+    this.scene.add(this.moonLight.target)
+
     this.composer()
   }
 
@@ -53,6 +59,10 @@ class Renderer extends Component {
   componentWillUnmount() {
     this.cameraPivotRotation.removeAllListeners()
     window.cancelAnimationFrame(this.raf)
+  }
+
+  getCamera() {
+    return this.camera
   }
 
   composer() {
@@ -119,7 +129,7 @@ class Renderer extends Component {
             />
           </object3D>
 
-          <ambientLight intensity={1} />
+          <ambientLight intensity={0.1} />
 
           <Terrain
             width={500}
@@ -128,7 +138,11 @@ class Renderer extends Component {
             widthSegments={28}
             heightSegments={1}
             depthSegments={28}
+            tool={this.props.tool}
+            winWidth={this.props.winWidth}
+            winHeight={this.props.winHeight}
             vertices={this.props.terrainVerts}
+            getCamera={this.getCamera}
           />
 
           {/* <Skybox time={Time.getTime()} /> */}
@@ -169,6 +183,22 @@ class Renderer extends Component {
               position={new THREE.Vector3(0, 0, 750)}
               time={50000}
             />
+            <spotLight
+              angle={1}
+              position={new THREE.Vector3(0, 0, 750)}
+              castShadow
+              decay={0}
+              distance={1275}
+              intensity={1}
+              ref={ref => {
+                this.sunLight = ref
+              }}
+              shadowCameraFov={30}
+              shadowCameraNear={550}
+              shadowCameraFar={1250}
+              shadowMapWidth={this.props.shadowQuality}
+              shadowMapHeight={this.props.shadowQuality}
+            />
 
             {/* <CelestialBody
               name="moon"
@@ -182,6 +212,22 @@ class Renderer extends Component {
               color={new THREE.Color(0xbfbfbf)}
               position={new THREE.Vector3(0, 0, -750)}
               time={50000}
+            />
+            <spotLight
+              angle={1}
+              position={new THREE.Vector3(0, 0, -750)}
+              castShadow
+              decay={0}
+              distance={1275}
+              intensity={1}
+              ref={ref => {
+                this.moonLight = ref
+              }}
+              shadowCameraFov={30}
+              shadowCameraNear={550}
+              shadowCameraFar={1250}
+              shadowMapWidth={this.props.shadowQuality}
+              shadowMapHeight={this.props.shadowQuality}
             />
           </group>
         </scene>
@@ -198,20 +244,24 @@ Renderer.propTypes = {
   // player
   cameraRotation: PropTypes.number.isRequired,
   terrainVerts: PropTypes.arrayOf(PropTypes.number).isRequired,
+  tool: PropTypes.string.isRequired,
   // window
   winWidth: PropTypes.number.isRequired,
   winHeight: PropTypes.number.isRequired,
   pixelRatio: PropTypes.number.isRequired,
+  shadowQuality: PropTypes.number.isRequired,
 }
 
 const mapStateToProps = state => ({
   // player
   cameraRotation: state.player.cameraRotation,
   terrainVerts: state.player.terrain,
+  tool: state.player.tool,
   // window
   winWidth: state.window.width,
   winHeight: state.window.height,
   pixelRatio: state.window.pixelRatio,
+  shadowQuality: state.config.shadowquality,
 })
 
 export default connect(mapStateToProps)(Renderer)

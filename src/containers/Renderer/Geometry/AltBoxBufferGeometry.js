@@ -34,9 +34,9 @@ class AltBoxBufferGeometry {
     // prettier-ignore
     this.buildPlane("z", "y", "x",  1, -1, depth, height,  -width, depthSegments, heightSegments, false, 2) // -X plane
     // prettier-ignore
-    this.buildPlane("x", "y", "z",  1, -1, width, height,   depth, widthSegments,  depthSegments, false, 3) // +Z plane
+    this.buildPlane("x", "y", "z",  1, -1, width, height,   depth, widthSegments, heightSegments, false, 3) // +Z plane
     // prettier-ignore
-    this.buildPlane("x", "y", "z", -1, -1, width, height,  -depth, widthSegments,  depthSegments, false, 4) // -Z plane
+    this.buildPlane("x", "y", "z", -1, -1, width, height,  -depth, widthSegments, heightSegments, false, 4) // -Z plane
 
     // Build geometry
     this.tempGeometry.setIndex(this.indices)

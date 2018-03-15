@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 
-import { Loader } from "containers"
+import { Loader, Time } from "containers"
 
 class CelestialBody extends Component {
   constructor() {
@@ -37,9 +37,13 @@ class CelestialBody extends Component {
   }
 
   render() {
+    const time = Time.getTime()
+
+    // Complete in 5 seconds
+    const shineTime = ((time.sec * 1000 + time.ms) % 5000) / 5000
+
     return (
       <mesh
-        position={this.props.position}
         ref={c => {
           this.obj = c
         }}
@@ -56,12 +60,7 @@ class CelestialBody extends Component {
         >
           <uniforms>
             <uniform type="v3" name="color" value={this.props.color} />
-            <uniform
-              type="f"
-              name="time"
-              // Partially calculate in advance, as the shader's mod(x, y) function does not like large numbers?
-              value={(this.props.time % 5000) / 5000}
-            />
+            <uniform type="f" name="time" value={shineTime} />
           </uniforms>
         </shaderMaterial>
       </mesh>
@@ -71,8 +70,6 @@ class CelestialBody extends Component {
 
 CelestialBody.propTypes = {
   color: PropTypes.instanceOf(THREE.Color).isRequired,
-  position: PropTypes.instanceOf(THREE.Vector3).isRequired,
-  time: PropTypes.number.isRequired,
 }
 
 export default CelestialBody

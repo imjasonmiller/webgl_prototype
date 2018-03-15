@@ -17,6 +17,14 @@ class Loader {
         src: require("static/models/home.glb"),
       },
       {
+        name: "tree",
+        src: require("static/models/tree.glb"),
+      },
+      {
+        name: "windturbine",
+        src: require("static/models/windturbine.glb"),
+      },
+      {
         name: "celestialbody_vert",
         src: require("static/shaders/celestialbody_vert.glsl"),
       },

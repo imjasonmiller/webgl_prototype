@@ -19,10 +19,12 @@ const StyledContent = styled.div`
   }
 
   &::-webkit-scrollbar-track {
+    border-radius: 1em;
     background: ${props => props.theme.whitesmoke};
   }
 
   &::-webkit-scrollbar-thumb {
+    border-radius: 1em;
     background: ${props => props.theme.orange};
   }
 

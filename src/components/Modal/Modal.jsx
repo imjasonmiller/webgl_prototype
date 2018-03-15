@@ -18,6 +18,8 @@ const Wrap = styled.div`
   left: 0;
   opacity: ${props => props.opacity};
   margin: auto;
+  border-radius: 1em;
+  overflow: hidden;
 `
 
 const Background = styled(Animated.div)`

@@ -14,6 +14,10 @@ const initialState = {
   wearColor: 0,
   wearOption: 0,
   tool: "SELECT",
+  constructs: [],
+  constructSelected: "NONE",
+  constructRotation: 0,
+  terrainIntersection: { x: 0, y: 0, z: 0 },
 }
 
 const player = (state = initialState, action) => {
@@ -52,6 +56,26 @@ const player = (state = initialState, action) => {
       return {
         ...state,
         cameraRotation: state.cameraRotation + 90,
+      }
+    case "CONSTRUCT_SELECT":
+      return {
+        ...state,
+        constructSelected: action.construct,
+      }
+    case "CONSTRUCT_CREATE":
+      return {
+        ...state,
+        constructs: [
+          ...state.constructs,
+          {
+            name: action.name,
+            size: action.size,
+            x: action.x,
+            y: action.y,
+            z: action.z,
+            rotation: action.rotation,
+          },
+        ],
       }
     case "MODIFY_TERRAIN":
       return {
@@ -102,6 +126,11 @@ const player = (state = initialState, action) => {
       return {
         ...state,
         wearOption: action.option,
+      }
+    case "TERRAIN_INTERSECTION_UPDATE":
+      return {
+        ...state,
+        terrainIntersection: action.intersection,
       }
     default:
       return state

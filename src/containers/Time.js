@@ -1,22 +1,39 @@
 class Time {
   constructor() {
-    this.time = Date.now()
+    this.elapsedTime = 0
+    this.newTime = 0
+    this.oldTime = 0
+  }
+
+  start() {
+    this.newTime = (typeof performance === "undefined"
+      ? Date
+      : performance
+    ).now()
+    this.oldTime = this.newTime
   }
 
   getTime() {
-    const date = new Date()
-    const now = Date.now()
+    this.newTime = (typeof performance === "undefined"
+      ? Date
+      : performance
+    ).now()
+
+    const delta = (this.newTime - this.oldTime) / 1000
+
+    this.oldTime = this.newTime
+
+    this.elapsedTime += delta
+
+    const time = new Date()
 
     return {
-      delta: now - this.time,
-      min: date.getUTCMinutes(),
-      sec: date.getUTCSeconds(),
-      ms: date.getUTCMilliseconds(),
+      delta,
+      elapsedTime: this.elapsedTime,
+      ms: time.getUTCMilliseconds(),
+      sec: time.getUTCSeconds(),
+      min: time.getUTCMinutes(),
     }
-  }
-
-  setServerTime(ms) {
-    this.serverTime = ms
   }
 }
 

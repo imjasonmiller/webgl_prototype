@@ -7,7 +7,7 @@ import media from "style-utils/media"
 
 import { ButtonAvatar, ButtonStats, ButtonTool } from "components"
 
-import { Compass, ModalAvatar, ModalConfig } from "containers"
+import { Compass, ModalAvatar, ModalConfig, ModalCreate } from "containers"
 
 import { changeTool, rotateCamera } from "actions/player"
 
@@ -40,6 +40,8 @@ const Controls = styled.div`
     width: 500px;
     height: 150px;
   `};
+  transform: translateY(${props => (props.loadComplete ? `0` : `100%`)});
+  transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 `
 
 class Overlay extends Component {
@@ -48,6 +50,7 @@ class Overlay extends Component {
     this.state = {
       modalAvatar: false,
       modalConfig: false,
+      modalCreate: false,
     }
   }
 
@@ -57,6 +60,16 @@ class Overlay extends Component {
 
   handleHideConfig() {
     this.setState({ modalConfig: false })
+  }
+
+  handleShowCreate() {
+    this.setState({ modalCreate: true })
+    this.props.dispatch(changeTool("CREATE"))
+  }
+
+  handleHideCreate() {
+    this.setState({ modalCreate: false })
+    // this.props.dispatch(changeTool("SELECT"))
   }
 
   handleShowAvatar() {
@@ -95,7 +108,7 @@ class Overlay extends Component {
           cameraRotation={this.props.cameraRotation}
           handleCameraRotation={() => this.handleCameraRotation()}
         />
-        <Controls>
+        <Controls loadComplete={this.props.loadComplete}>
           <ButtonTool
             active={tool === "SELECT"}
             alt="Select construct"
@@ -107,8 +120,8 @@ class Overlay extends Component {
             active={tool === "CREATE"}
             alt="Create construct"
             src={iconCreate}
-            onMouseDown={() => dispatch(changeTool("CREATE"))}
-            onTouchStart={() => dispatch(changeTool("CREATE"))}
+            onMouseDown={() => this.handleShowCreate()}
+            onTouchStart={() => this.handleShowCreate()}
           />
           <ButtonAvatar onClick={() => this.handleShowAvatar()} />
           <ButtonTool
@@ -130,6 +143,10 @@ class Overlay extends Component {
           isOpen={this.state.modalConfig}
           handleHide={() => this.handleHideConfig()}
         />
+        <ModalCreate
+          isOpen={this.state.modalCreate}
+          handleHide={() => this.handleHideCreate()}
+        />
         <ModalAvatar
           isOpen={this.state.modalAvatar}
           handleHide={() => this.handleHideAvatar()}
@@ -141,6 +158,7 @@ class Overlay extends Component {
 
 Overlay.propTypes = {
   cameraRotation: PropTypes.number.isRequired,
+  loadComplete: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
   tool: PropTypes.string.isRequired,
 }
@@ -148,6 +166,7 @@ Overlay.propTypes = {
 const mapStateToProps = state => ({
   serverTime: state.player.serverTime,
   cameraRotation: state.player.cameraRotation,
+  loadComplete: state.player.loadComplete,
   tool: state.player.tool,
 })
 

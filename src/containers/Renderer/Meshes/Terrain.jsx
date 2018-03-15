@@ -1,11 +1,16 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
+import { connect } from "react-redux"
 
 import { AltBoxBufferGeometry } from "containers/Renderer/Geometry"
 
 import { Loader } from "containers"
 
+import { Arrow } from "containers/Renderer/Meshes"
+
 import throttle from "lodash/throttle"
+
+import { updateTerrainIntersect } from "actions/player"
 
 class Terrain extends Component {
   static roundToNearest(numToRound, numToRoundTo) {
@@ -343,6 +348,31 @@ class Terrain extends Component {
       -pointY * 2 + 1, // from top-to-bottom: 1 to -1
     )
 
+    if (tool === "CREATE") {
+      this.raycaster.setFromCamera(this.mouse, this.camera)
+      const ray = this.raycaster.intersectObject(this.terrain)
+
+      // Length will be > 0 if there was an intersection
+      if (ray.length > 0) {
+        const intersect = ray[0]
+
+        this.props.store.dispatch(
+          updateTerrainIntersect({
+            x: intersect.point.x,
+            y: intersect.point.y,
+            z: intersect.point.z,
+          }),
+        )
+
+        // Update terrain shader with the current intersection point
+        this.terrain.material[0].uniforms.intersect.value = new THREE.Vector3(
+          intersect.point.x,
+          intersect.point.y,
+          intersect.point.z,
+        )
+      }
+    }
+
     if (tool === "LOWER" || tool === "RAISE") {
       // Set ray origin, direction and intersection object
       this.raycaster.setFromCamera(this.mouse, this.camera)
@@ -357,6 +387,7 @@ class Terrain extends Component {
           intersect.point.y,
           intersect.point.z,
         )
+
         this.setPrevTerrainIntersect(
           intersect.point.x,
           intersect.point.y,
@@ -412,7 +443,13 @@ class Terrain extends Component {
         ref={c => {
           this.group = c
         }}
-      />
+      >
+        <Arrow
+          position={this.state.currTerrainIntersect}
+          tool={this.props.tool}
+          time={0}
+        />
+      </group>
     )
   }
 }
@@ -425,6 +462,13 @@ Terrain.propTypes = {
   widthSegments: PropTypes.number.isRequired,
   winWidth: PropTypes.number.isRequired,
   winHeight: PropTypes.number.isRequired,
+  store: PropTypes.shape({
+    dispatch: PropTypes.func.isRequired,
+  }).isRequired,
 }
 
-export default Terrain
+const mapStateToProps = state => ({
+  tool: state.player.tool,
+})
+
+export default connect(mapStateToProps)(Terrain)

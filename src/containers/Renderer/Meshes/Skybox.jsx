@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 
-import { Loader } from "containers"
+import { Loader, Time } from "containers"
 
 class Skybox extends Component {
   constructor() {
@@ -11,6 +11,16 @@ class Skybox extends Component {
   }
 
   render() {
+    const time = Time.getTime()
+
+    // One day every 300000 ms (5 min)
+    // const skyTime =
+    //   6.2831 *
+    //   ((time.min * 60000 + time.sec * 1000 + time.ms) % 300000) /
+    //   300000
+
+    const skyTime = 6.2831 * ((time.sec * 1000 + time.ms) % 10000) / 10000
+
     return (
       <mesh
         ref={c => {
@@ -28,7 +38,7 @@ class Skybox extends Component {
           side={THREE.BackSide}
         >
           <uniforms>
-            <uniform type="f" name="time" value={this.props.time.delta} />
+            <uniform type="f" name="time" value={skyTime} />
           </uniforms>
         </shaderMaterial>
       </mesh>
@@ -42,12 +52,6 @@ Skybox.defaultProps = {
 
 Skybox.propTypes = {
   size: PropTypes.number,
-  time: PropTypes.shape({
-    delta: PropTypes.number,
-    min: PropTypes.number,
-    sec: PropTypes.number,
-    ms: PropTypes.number,
-  }).isRequired,
 }
 
 export default Skybox

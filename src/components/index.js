@@ -4,3 +4,5 @@ export { default as ButtonTool } from "./ButtonTool"
 
 export { default as Modal } from "./Modal/Modal"
 export { default as Spinner } from "./Spinner"
+
+export { default as ConstructIcon } from "./Create/ConstructIcon"

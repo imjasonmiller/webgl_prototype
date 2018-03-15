@@ -10,7 +10,7 @@ const vec3 colorEveningUpper = vec3( 0.000, 0.004, 0.102 ); // 0x00011a
 
 void main() {
   float height = normalize( vWorldPosition ).y + 0.4;
-  float dayTime = ( sin( time / 1000.0 ) + 1.0 ) / 2.0;
+  float dayTime = ( cos( -time ) + 1.0 ) / 2.0;
 
   vec3 lowerColor = mix( colorMorningLower, colorEveningLower, dayTime ); 
   vec3 upperColor = mix( colorMorningUpper, colorEveningUpper, dayTime );

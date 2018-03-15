@@ -52,6 +52,26 @@ export const rotateCamera = () => ({
   type: "CAMERA_ROTATION",
 })
 
+export const selectConstruct = construct => ({
+  type: "CONSTRUCT_SELECT",
+  construct,
+})
+
+export const createConstruct = ({ x, y, z, name, size, rotation }) => ({
+  type: "CONSTRUCT_CREATE",
+  x,
+  y,
+  z,
+  name,
+  size,
+  rotation,
+})
+
+export const updateTerrainIntersect = intersection => ({
+  type: "TERRAIN_INTERSECTION_UPDATE",
+  intersection,
+})
+
 export const changeTool = tool => ({
   type: "TOOL_CHANGE",
   tool,

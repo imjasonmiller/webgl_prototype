@@ -13,6 +13,7 @@ import { Time } from "containers"
 
 import {
   CelestialBody,
+  Constructs,
   Skybox,
   Starfield,
   Terrain,
@@ -20,24 +21,21 @@ import {
 } from "containers/Renderer/Meshes"
 
 import SSAOShader from "./PostProcessing/SSAOShader"
+import FadeShader from "./PostProcessing/FadeShader"
 import FXAAShader from "./PostProcessing/FXAAShader"
 import UnrealBloomPass from "./PostProcessing/UnrealBloomPass"
 
 class Renderer extends Component {
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
 
     this.state = {
-      timeNow: Date.now(),
-      // timeDelta: Date.now(),
+      time: Time.getTime(),
     }
-
-    this.gameTime = new THREE.Clock()
 
     this.origin = new THREE.Vector3(0, 0, 0)
 
     this.cameraPosition = new THREE.Vector3(0, 200, 500)
-
     this.cameraPivotRotation = new Animated.Value(0)
     this.cameraPivotRotation
       .interpolate({
@@ -180,6 +178,9 @@ class Renderer extends Component {
       0.75,
     )
 
+    // Setup vignette pass
+    const fadePass = new ShaderPass(FadeShader)
+
     // Copy pass
     const copyPass = new ShaderPass(CopyShader)
     copyPass.renderToScreen = true
@@ -188,6 +189,7 @@ class Renderer extends Component {
     this.composer.addPass(ssaoPass)
     this.composer.addPass(fxaaPass)
     this.composer.addPass(glowPass)
+    this.composer.addPass(fadePass)
     this.composer.addPass(copyPass)
 
     this.renderComposer()
@@ -332,12 +334,8 @@ class Renderer extends Component {
 
   renderComposer() {
     this.setState({
-      timeNow: Date.now(),
-      // timeDelta: Date.now() - this.state.timeNow,
-      // pivotRotation: new THREE.Euler(0, this.state.pivotRotation.y + 0.01, 0),
+      time: Time.getTime(),
     })
-
-    // console.log(this.state.timeNow, this.state.timeDelta)
 
     // Disable elements that should not be in the ambient occlussion texture
     this.starfield.obj.visible = false
@@ -381,6 +379,16 @@ class Renderer extends Component {
   render() {
     const { winWidth, winHeight, pixelRatio } = this.props
 
+    const time = Time.getTime()
+
+    // One rotation every 300000 ms (5 min)
+    // const skyRotation =
+    //   6.2831 *
+    //   ((time.min * 60000 + time.sec * 1000 + time.ms) % 300000) /
+    //   300000
+
+    const skyRotation = 6.2831 * ((time.sec * 1000 + time.ms) % 10000) / 10000
+
     const styles = {
       display: "block",
       position: "absolute",
@@ -392,6 +400,7 @@ class Renderer extends Component {
 
     return (
       <React3
+        antialias={false}
         canvasStyle={styles}
         mainCamera="camera"
         width={winWidth}
@@ -417,12 +426,12 @@ class Renderer extends Component {
             }}
           >
             <perspectiveCamera
-              name="camera"
-              fov={75}
               aspect={winWidth / winHeight}
-              near={10}
               far={2000}
+              fov={65}
               lookAt={this.origin}
+              name="camera"
+              near={10}
               position={this.cameraPosition}
               ref={c => {
                 this.camera = c
@@ -439,11 +448,11 @@ class Renderer extends Component {
             widthSegments={28}
             heightSegments={1}
             depthSegments={28}
-            tool={this.props.tool}
             winWidth={this.props.winWidth}
             winHeight={this.props.winHeight}
             vertices={this.props.terrainVerts}
             getCamera={this.getCamera}
+            store={this.context.store}
           />
 
           <Water
@@ -464,7 +473,8 @@ class Renderer extends Component {
             textureMatrix={this.waterReflectTextureMatrix}
           />
 
-          {/* <Skybox time={Time.getTime()} /> */}
+          <Constructs store={this.context.store} time={this.state.time} />
+
           <Skybox
             time={{ delta: 50000, min: 56, sec: 32 }}
             ref={c => {
@@ -485,93 +495,69 @@ class Renderer extends Component {
             }}
           />
 
-          {/* <group
-            rotation={
-              new THREE.Euler(
-                // Altitude, highest angle being 30 degrees
-                Math.PI / 6,
-                // Rotational speed, every 15000 ms = 1 rotation
-                Math.PI * 2 * ((this.state.timeNow % 15000) / 15000),
-                0,
-              )
-            }
-          > */}
           <group
             rotation={
               new THREE.Euler(
                 // Altitude, highest angle being 30 degrees
                 Math.PI / 6,
                 // Rotational speed, every 15000 ms = 1 rotation
-                Math.PI * 2,
+                skyRotation,
                 0,
               )
             }
           >
-            {/* <CelestialBody
-              name="sun"
-              color={new THREE.Color(0xe68c21)}
-              position={new THREE.Vector3(0, 0, 750)}
-              time={this.state.timeNow}
-            /> */}
+            <group position={new THREE.Vector3(0, 0, 750)}>
+              <CelestialBody
+                name="sun"
+                color={new THREE.Color(0xe68c21)}
+                time={50000}
+                ref={c => {
+                  this.sun = c
+                }}
+              />
 
-            <CelestialBody
-              name="sun"
-              color={new THREE.Color(0xe68c21)}
-              position={new THREE.Vector3(0, 0, 750)}
-              time={50000}
-              ref={c => {
-                this.sun = c
-              }}
-            />
-            <spotLight
-              angle={1}
-              position={new THREE.Vector3(0, 0, 750)}
-              castShadow
-              decay={0}
-              distance={1275}
-              intensity={1}
-              ref={c => {
-                this.sunLight = c
-              }}
-              shadowCameraFov={30}
-              shadowCameraNear={550}
-              shadowCameraFar={1250}
-              shadowMapWidth={this.props.shadowQuality}
-              shadowMapHeight={this.props.shadowQuality}
-            />
+              <spotLight
+                angle={1}
+                castShadow
+                decay={0}
+                distance={1275}
+                intensity={1}
+                ref={c => {
+                  this.sunLight = c
+                }}
+                shadowCameraFov={30}
+                shadowCameraNear={550}
+                shadowCameraFar={1250}
+                shadowMapWidth={this.props.shadowQuality}
+                shadowMapHeight={this.props.shadowQuality}
+              />
+            </group>
 
-            {/* <CelestialBody
-              name="moon"
-              color={new THREE.Color(0xbfbfbf)}
-              position={new THREE.Vector3(0, 0, -750)}
-              time={this.state.timeNow}
-            /> */}
-
-            <CelestialBody
-              name="moon"
-              color={new THREE.Color(0xbfbfbf)}
-              position={new THREE.Vector3(0, 0, -750)}
-              time={50000}
-              ref={c => {
-                this.moon = c
-              }}
-            />
-            <spotLight
-              angle={1}
-              position={new THREE.Vector3(0, 0, -750)}
-              castShadow
-              decay={0}
-              distance={1275}
-              intensity={1}
-              ref={c => {
-                this.moonLight = c
-              }}
-              shadowCameraFov={30}
-              shadowCameraNear={550}
-              shadowCameraFar={1250}
-              shadowMapWidth={this.props.shadowQuality}
-              shadowMapHeight={this.props.shadowQuality}
-            />
+            <group position={new THREE.Vector3(0, 0, -750)}>
+              <CelestialBody
+                name="moon"
+                color={new THREE.Color(0xbfbfbf)}
+                time={50000}
+                ref={c => {
+                  this.moon = c
+                }}
+              />
+              <spotLight
+                angle={1}
+                castShadow
+                decay={0}
+                distance={1275}
+                intensity={1}
+                ref={c => {
+                  this.moonLight = c
+                }}
+                shadowCameraFov={30}
+                shadowCameraNear={550}
+                shadowCameraFar={1250}
+                shadowMapWidth={this.props.shadowQuality}
+                shadowMapHeight={this.props.shadowQuality}
+              />
+            </group>
           </group>
         </scene>
       </React3>
@@ -580,27 +566,25 @@ class Renderer extends Component {
 }
 
 /**
- * All props are passed down to their components here due to a bug
+ * The store/props are passed down to their components here due to a bug
  * @see https://github.com/toxicFork/react-three-renderer/issues/140
  */
 Renderer.propTypes = {
-  // player
   cameraRotation: PropTypes.number.isRequired,
   terrainVerts: PropTypes.arrayOf(PropTypes.number).isRequired,
-  tool: PropTypes.string.isRequired,
-  // window
   winWidth: PropTypes.number.isRequired,
   winHeight: PropTypes.number.isRequired,
   pixelRatio: PropTypes.number.isRequired,
   shadowQuality: PropTypes.number.isRequired,
 }
 
+Renderer.contextTypes = {
+  store: PropTypes.object.isRequired,
+}
+
 const mapStateToProps = state => ({
-  // player
   cameraRotation: state.player.cameraRotation,
   terrainVerts: state.player.terrain,
-  tool: state.player.tool,
-  // window
   winWidth: state.window.width,
   winHeight: state.window.height,
   pixelRatio: state.window.pixelRatio,

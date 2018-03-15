@@ -23,6 +23,7 @@ export { default as Compass } from "./Overlay/Compass"
 // Modals
 export { default as ModalAvatar } from "./Overlay/ModalAvatar"
 export { default as ModalConfig } from "./Overlay/ModalConfig"
+export { default as ModalCreate } from "./Overlay/ModalCreate"
 
 // Renderer
 export { default as Renderer } from "./Renderer/Renderer"

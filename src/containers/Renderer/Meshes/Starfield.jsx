@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
-import { Loader } from "containers"
+import { Loader, Time } from "containers"
 
 class Starfield extends Component {
   constructor() {
@@ -91,6 +91,9 @@ class Starfield extends Component {
   }
 
   render() {
+    const time = Time.getTime()
+    const starTime = 6.2831 * ((time.sec * 1000 + time.ms) % 10000) / 10000
+
     return (
       <mesh
         position={new THREE.Vector3(0, 0, 0)}
@@ -111,7 +114,7 @@ class Starfield extends Component {
           transparent
         >
           <uniforms>
-            <uniform type="float" name="time" value={this.props.time} />
+            <uniform type="float" name="time" value={starTime} />
             <uniform
               type="vec2"
               name="winRes"
@@ -130,7 +133,6 @@ Starfield.propTypes = {
   count: PropTypes.number.isRequired,
   distance: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
-  time: PropTypes.number.isRequired,
   variance: PropTypes.number.isRequired,
   winWidth: PropTypes.number.isRequired,
   winHeight: PropTypes.number.isRequired,

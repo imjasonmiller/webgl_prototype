@@ -28,27 +28,46 @@ const client = {
           plugins: ["react-hot-loader/babel"],
         },
       },
+      // {
+      //   test: /\.svg$/,
+      //   use: [
+      //     {
+      //       loader: "url-loader",
+      //       options: {
+      //         limit: 1024,
+      //         outputPath: "img/",
+      //         name: "[hash].[ext]",
+      //       },
+      //     },
+      //     {
+      //       loader: "svgo-loader",
+      //       options: {
+      //         plugins: [
+      //           { removeTitle: true },
+      //           { convertColors: { shorthex: false } },
+      //           { convertPathData: false },
+      //           { cleanupIDs: { remove: false } },
+      //           { removesComments: true },
+      //         ],
+      //       },
+      //     },
+      //   ],
+      //   include: path.resolve("src", "static", "images"),
+      // },
       {
-        test: /\.svg$/,
+        test: /\.(gif|png|jpe?g|svg)$/i,
         use: [
           {
-            loader: "url-loader",
+            loader: "file-loader",
             options: {
-              limit: 1024,
               outputPath: "img/",
               name: "[hash].[ext]",
             },
           },
           {
-            loader: "svgo-loader",
+            loader: "image-webpack-loader",
             options: {
-              plugins: [
-                { removeTitle: true },
-                { convertColors: { shorthex: false } },
-                { convertPathData: false },
-                { cleanupIDs: { remove: false } },
-                { removesComments: true },
-              ],
+              bypassOnDebug: true,
             },
           },
         ],
@@ -145,27 +164,20 @@ const server = {
         },
       },
       {
-        test: /\.svg$/,
+        test: /\.(gif|png|jpe?g|svg)$/i,
         use: [
           {
-            loader: "url-loader",
+            loader: "file-loader",
             options: {
-              limit: 1024,
               emitFile: false,
               outputPath: "img/",
               name: "[hash].[ext]",
             },
           },
           {
-            loader: "svgo-loader",
+            loader: "image-webpack-loader",
             options: {
-              plugins: [
-                { removeTitle: true },
-                { convertColors: { shorthex: false } },
-                { convertPathData: false },
-                { cleanupIDs: { remove: false } },
-                { removesComments: true },
-              ],
+              bypassOnDebug: true,
             },
           },
         ],

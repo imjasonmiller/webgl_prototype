@@ -1,4 +1,6 @@
-### 👨‍🔬 Prototype WebGL Application
+### ⚡ Prototype WebGL Application
+
+![Project thumbnail](https://raw.githubusercontent.com/imjasonmiller/webgl_prototype/master/preview.jpg)
 
 A prototype of a WebGL application for a school project.
 

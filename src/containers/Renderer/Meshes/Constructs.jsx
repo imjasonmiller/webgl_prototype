@@ -64,7 +64,7 @@ class Constructs extends Component {
     //   isMoving: false,
     // }
 
-    this.handleDown = this.handleDown.bind(this)
+    // this.handleDown = this.handleDown.bind(this)
     this.handleUp = this.handleUp.bind(this)
 
     // window.addEventListener("mousedown", this.handleDown)

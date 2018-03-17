@@ -11,6 +11,12 @@ import ItemData from "static/avatar/item"
 import AvatarEdit from "./AvatarEdit"
 
 class AvatarEditItem extends Component {
+  constructor() {
+    super()
+
+    this.handleColor = this.handleColor.bind(this)
+  }
+
   handleColor(color) {
     this.props.dispatch(changeAvatarItemColor(color))
   }
@@ -79,7 +85,7 @@ class AvatarEditItem extends Component {
           colorsPageIndex={this.props.colorsPageIndex}
           colorsPageLength={this.props.colorsPageLength}
           data={ItemData.colors}
-          handleColor={color => this.handleColor(color)}
+          handleColor={this.handleColor}
         />
         <Pagination
           handlePrev={this.props.handlePrevColors}

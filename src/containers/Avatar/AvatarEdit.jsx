@@ -10,6 +10,12 @@ const AvatarEdit = (WrappedComponent, Data) =>
         optionsPageIndex: 0,
       }
 
+      this.handlePrevColors = this.handlePrevColors.bind(this)
+      this.handleNextColors = this.handleNextColors.bind(this)
+
+      this.handlePrevOptions = this.handlePrevOptions.bind(this)
+      this.handleNextOptions = this.handleNextOptions.bind(this)
+
       // Total length for colors and options arrays
       this.colorsLength = Data.colors.length
       this.optionsLength = Data.options.length
@@ -64,10 +70,10 @@ const AvatarEdit = (WrappedComponent, Data) =>
           colorsPageLength={this.colorsPageLength}
           optionsPageIndex={this.state.optionsPageIndex}
           optionsPageLength={this.optionsPageLength}
-          handlePrevColors={() => this.handlePrevColors()}
-          handleNextColors={() => this.handleNextColors()}
-          handlePrevOptions={() => this.handlePrevOptions()}
-          handleNextOptions={() => this.handleNextOptions()}
+          handlePrevColors={this.handlePrevColors}
+          handleNextColors={this.handleNextColors}
+          handlePrevOptions={this.handlePrevOptions}
+          handleNextOptions={this.handleNextOptions}
           {...this.props}
         />
       )

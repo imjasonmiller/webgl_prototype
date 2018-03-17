@@ -11,6 +11,12 @@ import WearData from "static/avatar/wear"
 import AvatarEdit from "./AvatarEdit"
 
 class AvatarEditWear extends Component {
+  constructor() {
+    super()
+
+    this.handleColor = this.handleColor.bind(this)
+  }
+
   handleColor(color) {
     this.props.dispatch(changeAvatarWearColor(color))
   }
@@ -79,7 +85,7 @@ class AvatarEditWear extends Component {
           colorsPageIndex={this.props.colorsPageIndex}
           colorsPageLength={this.props.colorsPageLength}
           data={WearData.colors}
-          handleColor={color => this.handleColor(color)}
+          handleColor={this.handleColor}
         />
         <Pagination
           handlePrev={this.props.handlePrevColors}

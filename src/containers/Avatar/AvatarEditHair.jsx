@@ -11,6 +11,12 @@ import HairData from "static/avatar/hair"
 import AvatarEdit from "./AvatarEdit"
 
 class AvatarEditHair extends Component {
+  constructor() {
+    super()
+
+    this.handleColor = this.handleColor.bind(this)
+  }
+
   handleColor(color) {
     this.props.dispatch(changeAvatarHairColor(color))
   }
@@ -79,7 +85,7 @@ class AvatarEditHair extends Component {
           colorsPageIndex={this.props.colorsPageIndex}
           colorsPageLength={this.props.colorsPageLength}
           data={HairData.colors}
-          handleColor={color => this.handleColor(color)}
+          handleColor={this.handleColor}
         />
         <Pagination
           handlePrev={this.props.handlePrevColors}

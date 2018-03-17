@@ -11,6 +11,12 @@ import FaceData from "static/avatar/face"
 import AvatarEdit from "./AvatarEdit"
 
 class AvatarEditFace extends Component {
+  constructor() {
+    super()
+
+    this.handleColor = this.handleColor.bind(this)
+  }
+
   handleColor(color) {
     this.props.dispatch(changeAvatarFaceColor(color))
   }
@@ -76,7 +82,7 @@ class AvatarEditFace extends Component {
           colorsPageIndex={this.props.colorsPageIndex}
           colorsPageLength={this.props.colorsPageLength}
           data={FaceData.colors}
-          handleColor={color => this.handleColor(color)}
+          handleColor={this.handleColor}
         />
         <Pagination
           handlePrev={this.props.handlePrevColors}

@@ -9,7 +9,7 @@ const CompressionPlugin = require("compression-webpack-plugin")
 
 const client = {
   name: "client",
-  mode: "development",
+  mode: "none",
   target: "web",
   context: path.resolve(__dirname, ".."),
   entry: "./src/client.entry.jsx",
@@ -35,26 +35,19 @@ const client = {
         },
       },
       {
-        test: /\.svg$/,
+        test: /\.(gif|png|jpe?g|svg)$/i,
         use: [
           {
-            loader: "url-loader",
+            loader: "file-loader",
             options: {
-              limit: 1024,
               outputPath: "img/",
               name: "[hash].[ext]",
             },
           },
           {
-            loader: "svgo-loader",
+            loader: "image-webpack-loader",
             options: {
-              plugins: [
-                { removeTitle: true },
-                { convertColors: { shorthex: false } },
-                { convertPathData: false },
-                { cleanupIDs: { remove: false } },
-                { removesComments: true },
-              ],
+              bypassOnDebug: true,
             },
           },
         ],
@@ -116,6 +109,7 @@ const client = {
     new webpack.ProvidePlugin({
       THREE: "three",
     }),
+    new Uglify(),
     new CompressionPlugin({
       asset: "[path].gz[query]",
       algorithm: "gzip",
@@ -129,7 +123,7 @@ const client = {
 
 const server = {
   name: "server",
-  mode: "development",
+  mode: "none",
   target: "node",
   context: path.resolve(__dirname, ".."),
   entry: "./src/server.entry.jsx",
@@ -163,27 +157,20 @@ const server = {
         },
       },
       {
-        test: /\.svg$/,
+        test: /\.(gif|png|jpe?g|svg)$/i,
         use: [
           {
-            loader: "url-loader",
+            loader: "file-loader",
             options: {
-              limit: 1024,
               emitFile: false,
               outputPath: "img/",
               name: "[hash].[ext]",
             },
           },
           {
-            loader: "svgo-loader",
+            loader: "image-webpack-loader",
             options: {
-              plugins: [
-                { removeTitle: true },
-                { convertColors: { shorthex: false } },
-                { convertPathData: false },
-                { cleanupIDs: { remove: false } },
-                { removesComments: true },
-              ],
+              bypassOnDebug: true,
             },
           },
         ],

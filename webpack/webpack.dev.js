@@ -28,32 +28,6 @@ const client = {
           plugins: ["react-hot-loader/babel"],
         },
       },
-      // {
-      //   test: /\.svg$/,
-      //   use: [
-      //     {
-      //       loader: "url-loader",
-      //       options: {
-      //         limit: 1024,
-      //         outputPath: "img/",
-      //         name: "[hash].[ext]",
-      //       },
-      //     },
-      //     {
-      //       loader: "svgo-loader",
-      //       options: {
-      //         plugins: [
-      //           { removeTitle: true },
-      //           { convertColors: { shorthex: false } },
-      //           { convertPathData: false },
-      //           { cleanupIDs: { remove: false } },
-      //           { removesComments: true },
-      //         ],
-      //       },
-      //     },
-      //   ],
-      //   include: path.resolve("src", "static", "images"),
-      // },
       {
         test: /\.(gif|png|jpe?g|svg)$/i,
         use: [

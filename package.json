@@ -30,7 +30,7 @@
     "file-loader": "^1.1.11",
     "image-webpack-loader": "^4.2.0",
     "jsonwebtoken": "^8.2.0",
-    "knex": "^0.14.4",
+    "knex": "^0.19.5",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.4.0",
